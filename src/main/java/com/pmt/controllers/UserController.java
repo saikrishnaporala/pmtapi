@@ -1,7 +1,6 @@
 package com.pmt.controllers;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
@@ -35,44 +34,44 @@ public class UserController {
 	private UserService userService;
 
 	// displaying list of all users
-	@GetMapping("/users")
+	@GetMapping("/")
 	public List<User> getAllUser() {
 		return userService.getAllUsers();
 	}
 
 	// displaying user by id
-	@GetMapping("/users/{id}")
-	public Optional<User> getUser(@PathVariable UUID id) {
+	@GetMapping("/{id}")
+	public User getUser(@PathVariable UUID id) {
 		return userService.getUser(id);
 	}
 
 	// inserting user
-	@PostMapping("/{comp}/register")
+	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<UUID> addUsers(@PathVariable(value = "comp") UUID comp, @RequestBody User user) {
-		return new ResponseEntity<>(userService.addUser(user, comp), HttpStatus.CREATED);
+	public ResponseEntity<UUID> addUsers(@RequestBody User user) {
+		return new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
 	}
 
 	// updating user by id
-	@PutMapping("/users/{id}")
+	@PutMapping("/{id}")
 	public void updateUser(@RequestBody User e, @PathVariable UUID id) {
 		userService.updateUser(e, id);
 	}
 
 	// deleting all users
-	@DeleteMapping("/users")
+	@DeleteMapping("/")
 	public void deleteAllUsers() {
 		userService.deleteAllUsers();
 	}
 
 	// deleting user by id
-	@DeleteMapping("users/{id}")
+	@DeleteMapping("/{id}")
 	public void deleteUserByID(@RequestBody User e, @PathVariable UUID id) {
 		userService.deleteUserByID(id);
 	}
 
 	// updating/ patching user by id
-	@PatchMapping("users/{id}")
+	@PatchMapping("/{id}")
 	public void patchUserByID(@RequestBody User e, @PathVariable UUID id) {
 		userService.patchUser(e, id);
 	}

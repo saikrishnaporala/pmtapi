@@ -31,7 +31,7 @@ public class Team {
 
 	@Column(name = "teammembers")
 	@OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
-	private Set<User> users;
+	private Set<Employee> emp;
 
 	@Column(name = "teamavatar")
 	private String teamavatar;
@@ -71,12 +71,12 @@ public class Team {
 		this.company = company;
 	}
 
-	public Set<User> getUsers() {
-		return users;
+	public Set<Employee> getEmp() {
+		return emp;
 	}
 
-	public void setUsers(Set<User> users) {
-		this.users = users;
+	public void setEmp(Set<Employee> emp) {
+		this.emp = emp;
 	}
 
 	public String getTeamavatar() {
@@ -95,22 +95,22 @@ public class Team {
 		this.color = color;
 	}
 
-	@Override
-	public String toString() {
-		return "Team [id=" + id + ", teamUniqId=" + teamUniqId + ", name=" + name + ", company=" + company + ", users="
-				+ users + ", teamavatar=" + teamavatar + ", color=" + color + "]";
-	}
-
-	public Team(int id, String teamUniqId, String name, Company company, Set<User> users, String teamavatar,
+	public Team(int id, String teamUniqId, String name, Company company, Set<Employee> emp, String teamavatar,
 			String color) {
 		super();
 		this.id = id;
 		this.teamUniqId = teamUniqId;
 		this.name = name;
 		this.company = company;
-		this.users = users;
+		this.emp = emp;
 		this.teamavatar = teamavatar;
 		this.color = color;
+	}
+
+	@Override
+	public String toString() {
+		return "Team [id=" + id + ", teamUniqId=" + teamUniqId + ", name=" + name + ", company=" + company + ", emp="
+				+ emp + ", teamavatar=" + teamavatar + ", color=" + color + "]";
 	}
 
 }

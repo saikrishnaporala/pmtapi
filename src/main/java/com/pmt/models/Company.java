@@ -62,15 +62,17 @@ public class Company {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modified;
 
-	@Column(name = "team")
 	@JsonIgnore
 	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
 	private Set<Team> teams;
 
-	@Column(name = "user")
 	@JsonIgnore
 	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-	private Set<User> user;
+	private Set<Department> dept;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+	private Set<Employee> employee;
 
 	public Company() {
 	}
@@ -271,30 +273,27 @@ public class Company {
 		this.teams = teams;
 	}
 
-	public Set<User> getUser() {
-		return user;
+	public Set<Department> getDept() {
+		return dept;
 	}
 
-	public void setUser(Set<User> user) {
-		this.user = user;
+	public void setDept(Set<Department> dept) {
+		this.dept = dept;
 	}
 
-	@Override
-	public String toString() {
-		return "Company [id=" + id + ", companyName=" + companyName + ", contactPerson=" + contactPerson + ", logo="
-				+ logo + ", address1=" + address1 + ", address2=" + address2 + ", city=" + city + ", state=" + state
-				+ ", country=" + country + ", zip=" + zip + ", phone=" + phone + ", fax=" + fax + ", email=" + email
-				+ ", website=" + website + ", legalStatus=" + legalStatus + ", estdYear=" + estdYear + ", empcount="
-				+ empcount + ", accessempcount=" + accessempcount + ", businessType=" + businessType + ", aboutme="
-				+ aboutme + ", isActive=" + isActive + ", created=" + created + ", modified=" + modified + ", teams="
-				+ teams + ", user=" + user + "]";
+	public Set<Employee> getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Set<Employee> employee) {
+		this.employee = employee;
 	}
 
 	public Company(UUID id, String companyName, String contactPerson, String logo, String address1, String address2,
 			String city, String state, String country, String zip, String phone, String fax, String email,
 			String website, String legalStatus, String estdYear, String empcount, String accessempcount,
 			String businessType, String aboutme, byte isActive, Date created, Date modified, Set<Team> teams,
-			Set<User> user) {
+			Set<Department> dept, Set<Employee> employee) {
 		super();
 		this.id = id;
 		this.companyName = companyName;
@@ -320,7 +319,19 @@ public class Company {
 		this.created = created;
 		this.modified = modified;
 		this.teams = teams;
-		this.user = user;
+		this.dept = dept;
+		this.employee = employee;
+	}
+
+	@Override
+	public String toString() {
+		return "Company [id=" + id + ", companyName=" + companyName + ", contactPerson=" + contactPerson + ", logo="
+				+ logo + ", address1=" + address1 + ", address2=" + address2 + ", city=" + city + ", state=" + state
+				+ ", country=" + country + ", zip=" + zip + ", phone=" + phone + ", fax=" + fax + ", email=" + email
+				+ ", website=" + website + ", legalStatus=" + legalStatus + ", estdYear=" + estdYear + ", empcount="
+				+ empcount + ", accessempcount=" + accessempcount + ", businessType=" + businessType + ", aboutme="
+				+ aboutme + ", isActive=" + isActive + ", created=" + created + ", modified=" + modified + ", teams="
+				+ teams + ", dept=" + dept + ", employee=" + employee + "]";
 	}
 
 }

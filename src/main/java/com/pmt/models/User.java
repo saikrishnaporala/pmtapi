@@ -3,19 +3,17 @@ package com.pmt.models;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * The persistent class for the users database table.
@@ -31,26 +29,25 @@ public class User {
 	@Column(name = "id", columnDefinition = "BINARY(16)")
 	private UUID id;
 
-	private int empid;
-	private String firstName;
-	private String lastName;
-	private String officialEmail;
-	private String personalEmail;
-	private Long mob;
-	private int dept;
-	private int roleType;
 	private String username;
 	private String password;
-	private String skypeId;
-	private String twitterId;
-	private String linkedinId;
 	private byte isactive;
 	private byte isAgree;
 	private byte isEmail;
-	private String photo;
-	private String gaccessToken;
 	private int activeDashboardTab;
 	private byte deskNotify;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "act_date")
+	private Date actDate;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "billing_end_date")
+	private Date billingEndDate;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "billing_start_date")
+	private Date billingStartDate;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dt_created")
@@ -68,20 +65,9 @@ public class User {
 	@Column(name = "dt_updated")
 	private Date dtUpdated;
 
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "company_id")
-	private Company company;
-
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "team_id")
-	private Team team;
-
-	@JsonIgnore
-	@OneToOne
-	@JoinColumn(name = "companyusers_id")
-	private CompanyUsers companyUser;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "emp_id")
+	private Employee emp;
 
 	public User() {
 	}
@@ -92,70 +78,6 @@ public class User {
 
 	public void setId(UUID id) {
 		this.id = id;
-	}
-
-	public int getEmpid() {
-		return empid;
-	}
-
-	public void setEmpid(int empid) {
-		this.empid = empid;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getOfficialEmail() {
-		return officialEmail;
-	}
-
-	public void setOfficialEmail(String officialEmail) {
-		this.officialEmail = officialEmail;
-	}
-
-	public String getPersonalEmail() {
-		return personalEmail;
-	}
-
-	public void setPersonalEmail(String personalEmail) {
-		this.personalEmail = personalEmail;
-	}
-
-	public Long getMob() {
-		return mob;
-	}
-
-	public void setMob(Long mob) {
-		this.mob = mob;
-	}
-
-	public int getDept() {
-		return dept;
-	}
-
-	public void setDept(int dept) {
-		this.dept = dept;
-	}
-
-	public int getRoleType() {
-		return roleType;
-	}
-
-	public void setRoleType(int roleType) {
-		this.roleType = roleType;
 	}
 
 	public String getUsername() {
@@ -172,30 +94,6 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getSkypeId() {
-		return skypeId;
-	}
-
-	public void setSkypeId(String skypeId) {
-		this.skypeId = skypeId;
-	}
-
-	public String getTwitterId() {
-		return twitterId;
-	}
-
-	public void setTwitterId(String twitterId) {
-		this.twitterId = twitterId;
-	}
-
-	public String getLinkedinId() {
-		return linkedinId;
-	}
-
-	public void setLinkedinId(String linkedinId) {
-		this.linkedinId = linkedinId;
 	}
 
 	public byte getIsactive() {
@@ -220,22 +118,6 @@ public class User {
 
 	public void setIsEmail(byte isEmail) {
 		this.isEmail = isEmail;
-	}
-
-	public String getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
-
-	public String getGaccessToken() {
-		return gaccessToken;
-	}
-
-	public void setGaccessToken(String gaccessToken) {
-		this.gaccessToken = gaccessToken;
 	}
 
 	public int getActiveDashboardTab() {
@@ -286,77 +168,67 @@ public class User {
 		this.dtUpdated = dtUpdated;
 	}
 
-	public Company getCompany() {
-		return company;
+	public Date getActDate() {
+		return actDate;
 	}
 
-	public void setCompany(Company company) {
-		this.company = company;
+	public void setActDate(Date actDate) {
+		this.actDate = actDate;
 	}
 
-	public Team getTeam() {
-		return team;
+	public Date getBillingEndDate() {
+		return billingEndDate;
 	}
 
-	public void setTeam(Team team1) {
-		team = team1;
+	public void setBillingEndDate(Date billingEndDate) {
+		this.billingEndDate = billingEndDate;
 	}
 
-	public CompanyUsers getCompanyUser() {
-		return companyUser;
+	public Date getBillingStartDate() {
+		return billingStartDate;
 	}
 
-	public void setCompanyUser(CompanyUsers companyUser) {
-		this.companyUser = companyUser;
+	public void setBillingStartDate(Date billingStartDate) {
+		this.billingStartDate = billingStartDate;
 	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", empid=" + empid + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", officialEmail=" + officialEmail + ", personalEmail=" + personalEmail + ", mob=" + mob + ", dept= "
-				+ dept + ", roleType=" + roleType + ", username=" + username + ", password=" + password + ", skypeId="
-				+ skypeId + ", twitterId=" + twitterId + ", linkedinId=" + linkedinId + ", isactive=" + isactive
-				+ ", isAgree=" + isAgree + ", isEmail=" + isEmail + ", photo=" + photo + ", gaccessToken="
-				+ gaccessToken + ", activeDashboardTab=" + activeDashboardTab + ", deskNotify=" + deskNotify
-				+ ", dtCreated=" + dtCreated + ", dtLastLogin=" + dtLastLogin + ", dtLastLogout=" + dtLastLogout
-				+ ", dtUpdated=" + dtUpdated + ", company=" + company + ", team=" + team + ", companyUser="
-				+ companyUser + "]";
+	public Employee getEmp() {
+		return emp;
 	}
 
-	public User(UUID id, int empid, String firstName, String lastName, String officialEmail, String personalEmail,
-			Long mob, int dept, int roleType, String username, String password, String skypeId, String twitterId,
-			String linkedinId, byte isactive, byte isAgree, byte isEmail, String photo, String gaccessToken,
-			int activeDashboardTab, byte deskNotify, Date dtCreated, Date dtLastLogin, Date dtLastLogout,
-			Date dtUpdated, Company company, Team team1, CompanyUsers companyUser) {
+	public void setEmp(Employee emp) {
+		this.emp = emp;
+	}
+
+	public User(UUID id, String username, String password, byte isactive, byte isAgree, byte isEmail,
+			int activeDashboardTab, byte deskNotify, Date actDate, Date billingEndDate, Date billingStartDate,
+			Date dtCreated, Date dtLastLogin, Date dtLastLogout, Date dtUpdated, Employee emp) {
 		super();
 		this.id = id;
-		this.empid = empid;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.officialEmail = officialEmail;
-		this.personalEmail = personalEmail;
-		this.mob = mob;
-		this.dept = dept;
-		this.roleType = roleType;
 		this.username = username;
 		this.password = password;
-		this.skypeId = skypeId;
-		this.twitterId = twitterId;
-		this.linkedinId = linkedinId;
 		this.isactive = isactive;
 		this.isAgree = isAgree;
 		this.isEmail = isEmail;
-		this.photo = photo;
-		this.gaccessToken = gaccessToken;
 		this.activeDashboardTab = activeDashboardTab;
 		this.deskNotify = deskNotify;
+		this.actDate = actDate;
+		this.billingEndDate = billingEndDate;
+		this.billingStartDate = billingStartDate;
 		this.dtCreated = dtCreated;
 		this.dtLastLogin = dtLastLogin;
 		this.dtLastLogout = dtLastLogout;
 		this.dtUpdated = dtUpdated;
-		this.company = company;
-		team = team1;
-		this.companyUser = companyUser;
+		this.emp = emp;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", isactive=" + isactive
+				+ ", isAgree=" + isAgree + ", isEmail=" + isEmail + ", activeDashboardTab=" + activeDashboardTab
+				+ ", deskNotify=" + deskNotify + ", actDate=" + actDate + ", billingEndDate=" + billingEndDate
+				+ ", billingStartDate=" + billingStartDate + ", dtCreated=" + dtCreated + ", dtLastLogin=" + dtLastLogin
+				+ ", dtLastLogout=" + dtLastLogout + ", dtUpdated=" + dtUpdated + ", emp=" + emp + "]";
 	}
 
 }

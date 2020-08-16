@@ -2,7 +2,6 @@ package com.pmt.services;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ public class UserService {
 	private UserRepo userRepository;
 
 	@Autowired
-	private CompanyService companyService;
+	private EmployeeService service;
 
 	@Autowired
 	private PasswordEncoder bcryptEncoder;
@@ -31,15 +30,15 @@ public class UserService {
 	}
 
 	// fetching user by id
-	public Optional<User> getUser(UUID id) {
-		return userRepository.findById(id);
+	public User getUser(UUID id) {
+		return userRepository.getOne(id);
 	}
 
 	// inserting user
-	public UUID addUser(User c, UUID comp) {
+	public UUID addUser(User c) {
+		c.setEmp(service.getEmployee(c.getEmp().getId()));
 		System.out.println("username : " + c.getUsername());
 		System.out.println("pswd : " + c.getPassword());
-		c.setCompany(companyService.getComp(comp));
 		c.setPassword(bcryptEncoder.encode(c.getPassword()));
 		Date dtCreated = new Date();
 		c.setDtCreated(dtCreated);
