@@ -34,8 +34,8 @@ public class EmployeeService {
 	}
 
 	// inserting employee
-	public UUID addEmployee(Employee obj, UUID comp) {
-		obj.setCompany(companyService.getComp(comp));
+	public UUID addEmployee(Employee obj) {
+		obj.setCompany(companyService.getComp(obj.getCompany().getId()));
 		obj.setDept(deptService.getDepartment(obj.getDept().getId()));
 		Date dtCreated = new Date();
 		obj.setDtCreated(dtCreated);

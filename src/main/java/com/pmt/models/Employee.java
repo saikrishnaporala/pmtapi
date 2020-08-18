@@ -1,6 +1,7 @@
 package com.pmt.models;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -9,7 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -55,7 +58,6 @@ public class Employee {
 	@Column(name = "dt_updated")
 	private Date dtUpdated;
 
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "company_id")
 	private Company company;
@@ -65,13 +67,21 @@ public class Employee {
 	@JoinColumn(name = "team_id")
 	private Team team;
 
-	@JsonIgnore
 	@OneToOne(mappedBy = "emp")
 	private User user;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "dept_id")
 	private Department dept;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "createdBy", cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE,
+			CascadeType.REFRESH })
+	private List<Project> proj;
+
+	@ManyToMany(targetEntity = Project.class, cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE,
+			CascadeType.REFRESH })
+	private List<Project> projects;
 
 	public Employee() {
 	}
@@ -244,42 +254,10 @@ public class Employee {
 		this.user = user;
 	}
 
-	@Override
-	public String toString() {
-		return "Employee [id=" + id + ", empid=" + empid + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", officialEmail=" + officialEmail + ", personalEmail=" + personalEmail + ", mob=" + mob + ", dept="
-				+ dept + ", roleType=" + roleType + ", skypeId=" + skypeId + ", twitterId=" + twitterId
-				+ ", linkedinId=" + linkedinId + ", isactive=" + isactive + ", isAgree=" + isAgree + ", isEmail="
-				+ isEmail + ", photo=" + photo + ", dtCreated=" + dtCreated + ", dtUpdated=" + dtUpdated + ", company="
-				+ company + ", team=" + team + ", user=" + user + "]";
-	}
-
-	public Employee(UUID id, int empid, String firstName, String lastName, String officialEmail, String personalEmail,
-			Long mob, Department dept, int roleType, String skypeId, String twitterId, String linkedinId, byte isactive,
-			byte isAgree, byte isEmail, String photo, Date dtCreated, Date dtUpdated, Company company, Team team,
-			User user) {
-		super();
-		this.id = id;
-		this.empid = empid;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.officialEmail = officialEmail;
-		this.personalEmail = personalEmail;
-		this.mob = mob;
-		this.dept = dept;
-		this.roleType = roleType;
-		this.skypeId = skypeId;
-		this.twitterId = twitterId;
-		this.linkedinId = linkedinId;
-		this.isactive = isactive;
-		this.isAgree = isAgree;
-		this.isEmail = isEmail;
-		this.photo = photo;
-		this.dtCreated = dtCreated;
-		this.dtUpdated = dtUpdated;
-		this.company = company;
-		this.team = team;
-		this.user = user;
-	}
+	/*
+	 * public List<Project> getProj() { return proj; }
+	 * 
+	 * public void setProj(List<Project> proj) { this.proj = proj; }
+	 */
 
 }

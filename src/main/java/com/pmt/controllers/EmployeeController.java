@@ -1,7 +1,6 @@
 package com.pmt.controllers;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
@@ -47,10 +46,10 @@ public class EmployeeController {
 	}
 
 	// inserting employee
-	@PostMapping("/{comp}/register")
+	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<UUID> addEmployees(@PathVariable(value = "comp") UUID comp, @RequestBody Employee obj) {
-		return new ResponseEntity<>(service.addEmployee(obj, comp), HttpStatus.CREATED);
+	public ResponseEntity<UUID> addEmployees(@RequestBody Employee obj) {
+		return new ResponseEntity<>(service.addEmployee(obj), HttpStatus.CREATED);
 	}
 
 	// updating employee by id

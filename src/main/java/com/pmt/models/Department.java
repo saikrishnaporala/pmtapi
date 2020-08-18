@@ -1,6 +1,7 @@
 package com.pmt.models;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -9,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -30,7 +31,6 @@ public class Department {
 	private String deptHead;
 	private int empCount;
 
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "company_id")
 	private Company company;
@@ -44,8 +44,8 @@ public class Department {
 	private Date dtUpdated;
 
 	@JsonIgnore
-	@OneToOne(mappedBy = "dept")
-	private Employee emp;
+	@OneToMany(mappedBy = "dept")
+	private List<Employee> emp;
 
 	public Department() {
 	}
@@ -106,11 +106,11 @@ public class Department {
 		this.dtUpdated = dtUpdated;
 	}
 
-	public Employee getEmp() {
+	public List<Employee> getEmp() {
 		return emp;
 	}
 
-	public void setEmp(Employee emp) {
+	public void setEmp(List<Employee> emp) {
 		this.emp = emp;
 	}
 

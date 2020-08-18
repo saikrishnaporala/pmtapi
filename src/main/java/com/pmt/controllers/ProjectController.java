@@ -20,60 +20,59 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pmt.models.Department;
-import com.pmt.services.DepartmentService;
+import com.pmt.models.Project;
+import com.pmt.services.ProjectService;
 
 @CrossOrigin("http://localhost:8080")
 @RestController
-@RequestMapping("/dept")
-public class DeptController {
+@RequestMapping("/project")
+public class ProjectController {
 
-	static final Logger logger = LogManager.getLogger(DeptController.class.getName());
+	static final Logger logger = LogManager.getLogger(ProjectController.class.getName());
 
 	@Autowired
-	private DepartmentService service;
+	private ProjectService service;
 
-	// displaying list of all departments
+	// displaying list of all projects
 	@GetMapping("/")
-	public List<Department> getAllDepts() {
-		return service.getAllDepartments();
+	public List<Project> getAllProject() {
+		return service.getAllProjects();
 	}
 
-	// displaying dept by id
+	// displaying project by id
 	@GetMapping("/{id}")
-	public Department getDept(@PathVariable UUID id) {
-		return service.getDepartment(id);
+	public Project getProject(@PathVariable UUID id) {
+		return service.getProject(id);
 	}
 
-	// inserting dept
-	@PostMapping("/create")
+	// inserting project
+	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<UUID> addDepts(@RequestBody Department dept) {
-		return new ResponseEntity<>(service.addDepartment(dept), HttpStatus.CREATED);
+	public ResponseEntity<UUID> addProjects(@RequestBody Project project) {
+		return new ResponseEntity<>(service.addProject(project), HttpStatus.CREATED);
 	}
 
-	// updating dept by id
+	// updating project by id
 	@PutMapping("/{id}")
-	public void updateDept(@RequestBody Department e, @PathVariable UUID id) {
-		service.updateDepartment(e, id);
+	public void updateProject(@RequestBody Project e, @PathVariable UUID id) {
+		service.updateProject(e, id);
 	}
 
-	// deleting all dept
+	// deleting all projects
 	@DeleteMapping("/")
-	public void deleteAllDepartments() {
-		service.deleteAllDepartments();
+	public void deleteAllProjects() {
+		service.deleteAllProjects();
 	}
 
-	// deleting dept by id
+	// deleting project by id
 	@DeleteMapping("/{id}")
-	public void deleteDeptByID(@RequestBody Department e, @PathVariable UUID id) {
-		service.deleteDepartmentByID(id);
+	public void deleteProjectByID(@RequestBody Project e, @PathVariable UUID id) {
+		service.deleteProjectByID(id);
 	}
 
-	// updating/ patching dept by id
-	@PatchMapping("users/{id}")
-	public void patchUserByID(@RequestBody Department e, @PathVariable UUID id) {
-		service.patchDepartment(e, id);
-		;
+	// updating/ patching project by id
+	@PatchMapping("/{id}")
+	public void patchProjectByID(@RequestBody Project e, @PathVariable UUID id) {
+		service.patchProject(e, id);
 	}
 }

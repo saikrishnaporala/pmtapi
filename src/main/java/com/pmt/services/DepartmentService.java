@@ -31,9 +31,9 @@ public class DepartmentService {
 	}
 
 	// inserting dept
-	public UUID addDepartment(Department c, UUID comp) {
+	public UUID addDepartment(Department c) {
 		System.out.println("deptname : " + c.getDeptName());
-		c.setCompany(companyService.getComp(comp));
+		c.setCompany(companyService.getComp(c.getCompany().getId()));
 		Date dtCreated = new Date();
 		c.setDtCreated(dtCreated);
 		deptRepository.save(c);

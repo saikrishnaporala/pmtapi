@@ -15,6 +15,8 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * The persistent class for the users database table.
  * 
@@ -65,6 +67,7 @@ public class User {
 	@Column(name = "dt_updated")
 	private Date dtUpdated;
 
+	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "emp_id")
 	private Employee emp;
