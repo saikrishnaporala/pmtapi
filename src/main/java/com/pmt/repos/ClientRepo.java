@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.pmt.models.Task;
+import com.pmt.models.Client;
 
-public interface TaskRepo extends JpaRepository<Task, UUID> {
+public interface ClientRepo extends JpaRepository<Client, UUID> {
 
 }

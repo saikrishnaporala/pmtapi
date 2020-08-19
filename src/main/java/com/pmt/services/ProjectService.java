@@ -24,7 +24,7 @@ public class ProjectService {
 	private CompanyService companyService;
 
 	@Autowired
-	private SprintService activityService;
+	private SprintService sprintService;
 
 	// fetching all projects
 	public List<Project> getAllProjects() {
@@ -45,7 +45,7 @@ public class ProjectService {
 		Date dtCreated = new Date();
 		c.setDtCreated(dtCreated);
 		repo.save(c);
-		activityService.defaultActivity(c, e, dtCreated);
+		sprintService.defaultSprint(c, e, dtCreated);
 		return c.getId();
 	}
 

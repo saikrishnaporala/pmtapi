@@ -24,20 +24,24 @@ import org.hibernate.annotations.GenericGenerator;
  * 
  */
 @Entity
-public class Task {
+public class Issues {
 	@Id
 	@GeneratedValue(generator = "uuid2")
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
 	@Column(name = "id", columnDefinition = "BINARY(16)")
 	private UUID id;
 
-	private String taskName;
+	private String issueSubject;
+
+	private String issueType;
 
 	@ManyToOne
 	@JoinColumn(name = "sprint_id")
 	private Sprint sprint; // object
 
-	private String taskType;
+	@ManyToOne
+	@JoinColumn(name = "proj_id")
+	private Project project; // object
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "start_date")
@@ -48,7 +52,7 @@ public class Task {
 	private Date endDate;
 
 	private String priority;
-	private String taskDescr;
+	private String issueDescr;
 	private String status;
 	private byte isactive;
 
@@ -72,7 +76,7 @@ public class Task {
 			CascadeType.MERGE, CascadeType.REFRESH })
 	private List<Employee> employees;
 
-	public Task() {
+	public Issues() {
 	}
 
 	public UUID getId() {
@@ -83,12 +87,20 @@ public class Task {
 		this.id = id;
 	}
 
-	public String getTaskName() {
-		return taskName;
+	public String getIssueSubject() {
+		return issueSubject;
 	}
 
-	public void setTaskName(String taskName) {
-		this.taskName = taskName;
+	public void setIssueSubject(String issueSubject) {
+		this.issueSubject = issueSubject;
+	}
+
+	public String getIssueType() {
+		return issueType;
+	}
+
+	public void setIssueType(String issueType) {
+		this.issueType = issueType;
 	}
 
 	public Sprint getSprint() {
@@ -99,12 +111,12 @@ public class Task {
 		this.sprint = sprint;
 	}
 
-	public String getTaskType() {
-		return taskType;
+	public Project getProject() {
+		return project;
 	}
 
-	public void setTaskType(String taskType) {
-		this.taskType = taskType;
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 	public Date getStartDate() {
@@ -131,12 +143,12 @@ public class Task {
 		this.priority = priority;
 	}
 
-	public String getTaskDescr() {
-		return taskDescr;
+	public String getIssueDescr() {
+		return issueDescr;
 	}
 
-	public void setTaskDescr(String taskDescr) {
-		this.taskDescr = taskDescr;
+	public void setIssueDescr(String issueDescr) {
+		this.issueDescr = issueDescr;
 	}
 
 	public String getStatus() {
@@ -211,26 +223,20 @@ public class Task {
 		this.employees = employees;
 	}
 
-	@Override
-	public String toString() {
-		return "Task [id=" + id + ", taskName=" + taskName + ", sprint=" + sprint + ", taskType=" + taskType
-				+ ", startDate=" + startDate + ", endDate=" + endDate + ", priority=" + priority + ", taskDescr="
-				+ taskDescr + ", status=" + status + ", isactive=" + isactive + ", dtCreated=" + dtCreated
-				+ ", dtUpdated=" + dtUpdated + ", review=" + review + ", revision=" + revision + ", comments="
-				+ comments + ", createdBy=" + createdBy + ", employees=" + employees + "]";
-	}
-
-	public Task(String taskName, Sprint sprint, String taskType, Date startDate, Date endDate, String priority,
-			String taskDescr, String status, byte isactive, Date dtCreated, Date dtUpdated, String review,
-			String revision, String comments, Employee createdBy, List<Employee> employees) {
+	public Issues(UUID id, String issueSubject, String issueType, Sprint sprint, Project project, Date startDate,
+			Date endDate, String priority, String issueDescr, String status, byte isactive, Date dtCreated,
+			Date dtUpdated, String review, String revision, String comments, Employee createdBy,
+			List<Employee> employees) {
 		super();
-		this.taskName = taskName;
+		this.id = id;
+		this.issueSubject = issueSubject;
+		this.issueType = issueType;
 		this.sprint = sprint;
-		this.taskType = taskType;
+		this.project = project;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.priority = priority;
-		this.taskDescr = taskDescr;
+		this.issueDescr = issueDescr;
 		this.status = status;
 		this.isactive = isactive;
 		this.dtCreated = dtCreated;
@@ -240,6 +246,15 @@ public class Task {
 		this.comments = comments;
 		this.createdBy = createdBy;
 		this.employees = employees;
+	}
+
+	@Override
+	public String toString() {
+		return "Issues [id=" + id + ", issueSubject=" + issueSubject + ", issueType=" + issueType + ", sprint=" + sprint
+				+ ", project=" + project + ", startDate=" + startDate + ", endDate=" + endDate + ", priority="
+				+ priority + ", issueDescr=" + issueDescr + ", status=" + status + ", isactive=" + isactive
+				+ ", dtCreated=" + dtCreated + ", dtUpdated=" + dtUpdated + ", review=" + review + ", revision="
+				+ revision + ", comments=" + comments + ", createdBy=" + createdBy + ", employees=" + employees + "]";
 	}
 
 }

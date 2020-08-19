@@ -7,81 +7,78 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pmt.models.Sprint;
 import com.pmt.models.Employee;
 import com.pmt.models.Project;
-import com.pmt.repos.SprintRepo;
+import com.pmt.models.Task;
+import com.pmt.repos.TaskRepo;
 
 @Service
 public class TaskService {
 
 	@Autowired
-	private SprintRepo repo;
+	private TaskRepo repo;
 
 	@Autowired
 	private EmployeeService empservice;
 
 	@Autowired
-	private ProjectService projectService;
+	private SprintService sprintService;
 
-	// fetching all projects
-	public List<Sprint> getAllActivities() {
-		List<Sprint> list = (List<Sprint>) repo.findAll();
+	// fetching all Tasks
+	public List<Task> getAllTasks() {
+		List<Task> list = (List<Task>) repo.findAll();
 		return list;
 	}
 
-	// fetching project by id
-	public Sprint getActivity(UUID id) {
+	// fetching task by id
+	public Task getTask(UUID id) {
 		return repo.getOne(id);
 	}
 
-	// inserting project
-	public UUID addActivity(Sprint c) {
-		c.setActcreatedBy(empservice.getEmployee(c.getActcreatedBy().getId()));
-		c.setProj(projectService.getProject(c.getProj().getId()));
+	// inserting task
+	public UUID addTask(Task c) {
+		c.setCreatedBy(empservice.getEmployee(c.getCreatedBy().getId()));
+		c.setSprint(sprintService.getSprint(c.getSprint().getId()));
 		Date dtCreated = new Date();
 		c.setDtCreated(dtCreated);
 		repo.save(c);
 		return c.getId();
 	}
 
-	// updating project by id
-	public void updateActivity(Sprint project, UUID id) {
-		if (id == project.getId()) {
+	// updating task by id
+	public void updateTask(Task task, UUID id) {
+		if (id == task.getId()) {
 			Date dtUpdated = new Date();
-			project.setDtUpdated(dtUpdated);
-			repo.save(project);
+			task.setDtUpdated(dtUpdated);
+			repo.save(task);
 		}
 	}
 
-	// deleting all projects
-	public void deleteAllActivitys() {
+	// deleting all tasks
+	public void deleteAllTasks() {
 		repo.deleteAll();
 	}
 
-	// deleting project by id
-	public void deleteActivityByID(UUID id) {
+	// deleting task by id
+	public void deleteTaskByID(UUID id) {
 		repo.deleteById(id);
 	}
 
-	// patching/updating project by id
-	public void patchActivity(Sprint emp, UUID id) {
-		if (id == emp.getId()) {
-			repo.save(emp);
+	// patching/updating task by id
+	public void patchTask(Task obj, UUID id) {
+		if (id == obj.getId()) {
+			repo.save(obj);
 		}
 	}
 
-	public void defaultActivity(Project p, Employee e, Date d) {
+	public void defaultTask(Project p, Employee e, Date d) {
 
-		Sprint a1 = new Sprint("Strategy", "Open", p, e, d, d);
-		Sprint a2 = new Sprint("Design", "Open", p, e, d, d);
-		Sprint a3 = new Sprint("Development", "Open", p, e, d, d);
-		Sprint a4 = new Sprint("Testing", "Open", p, e, d, d);
-		Sprint a5 = new Sprint("Deliverables", "Open", p, e, d, d);
-		repo.save(a1);
-		repo.save(a2);
-		repo.save(a3);
-		repo.save(a4);
-		repo.save(a5);
+		/*
+		 * Task a1 = new Task("Strategy", "Open", p, e, d, d); Task a2 = new
+		 * Task("Design", "Open", p, e, d, d); Task a3 = new Task("Development", "Open",
+		 * p, e, d, d); Task a4 = new Task("Testing", "Open", p, e, d, d); Task a5 = new
+		 * Task("Deliverables", "Open", p, e, d, d); repo.save(a1); repo.save(a2);
+		 * repo.save(a3); repo.save(a4); repo.save(a5);
+		 */
 	}
 }

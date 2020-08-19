@@ -20,59 +20,59 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pmt.models.Sprint;
-import com.pmt.services.SprintService;
+import com.pmt.models.Project;
+import com.pmt.services.ProjectService;
 
 @CrossOrigin("http://localhost:8080")
 @RestController
-@RequestMapping("/sprint")
-public class SprintController {
+@RequestMapping("/activity")
+public class IssuesController {
 
-	static final Logger logger = LogManager.getLogger(SprintController.class.getName());
+	static final Logger logger = LogManager.getLogger(IssuesController.class.getName());
 
 	@Autowired
-	private SprintService service;
+	private ProjectService service;
 
-	// displaying list of all sprints
+	// displaying list of all projects
 	@GetMapping("/")
-	public List<Sprint> getAllSprint() {
-		return service.getAllSprints();
+	public List<Project> getAllProject() {
+		return service.getAllProjects();
 	}
 
-	// displaying sprint by id
+	// displaying project by id
 	@GetMapping("/{id}")
-	public Sprint getSprint(@PathVariable UUID id) {
-		return service.getSprint(id);
+	public Project getProject(@PathVariable UUID id) {
+		return service.getProject(id);
 	}
 
-	// inserting sprint
+	// inserting project
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<UUID> addSprints(@RequestBody Sprint sprint) {
-		return new ResponseEntity<>(service.addSprint(sprint), HttpStatus.CREATED);
+	public ResponseEntity<UUID> addProjects(@RequestBody Project project) {
+		return new ResponseEntity<>(service.addProject(project), HttpStatus.CREATED);
 	}
 
-	// updating sprint by id
+	// updating project by id
 	@PutMapping("/{id}")
-	public void updateSprint(@RequestBody Sprint e, @PathVariable UUID id) {
-		service.updateSprint(e, id);
+	public void updateProject(@RequestBody Project e, @PathVariable UUID id) {
+		service.updateProject(e, id);
 	}
 
-	// deleting all sprints
+	// deleting all projects
 	@DeleteMapping("/")
-	public void deleteAllSprints() {
-		service.deleteAllSprints();
+	public void deleteAllProjects() {
+		service.deleteAllProjects();
 	}
 
-	// deleting sprint by id
+	// deleting project by id
 	@DeleteMapping("/{id}")
-	public void deleteSprintByID(@RequestBody Sprint e, @PathVariable UUID id) {
-		service.deleteSprintByID(id);
+	public void deleteProjectByID(@RequestBody Project e, @PathVariable UUID id) {
+		service.deleteProjectByID(id);
 	}
 
-	// updating/ patching sprint by id
+	// updating/ patching project by id
 	@PatchMapping("/{id}")
-	public void patchSprintByID(@RequestBody Sprint e, @PathVariable UUID id) {
-		service.patchSprint(e, id);
+	public void patchProjectByID(@RequestBody Project e, @PathVariable UUID id) {
+		service.patchProject(e, id);
 	}
 }
