@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.pmt.models.Activity;
+import com.pmt.models.Sprint;
 
-public interface ActivityRepo extends JpaRepository<Activity, UUID> {
+public interface TaskRepo extends JpaRepository<Sprint, UUID> {
 
 }

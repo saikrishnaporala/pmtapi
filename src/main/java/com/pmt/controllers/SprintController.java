@@ -26,9 +26,9 @@ import com.pmt.services.ProjectService;
 @CrossOrigin("http://localhost:8080")
 @RestController
 @RequestMapping("/activity")
-public class ActivityController {
+public class SprintController {
 
-	static final Logger logger = LogManager.getLogger(ActivityController.class.getName());
+	static final Logger logger = LogManager.getLogger(SprintController.class.getName());
 
 	@Autowired
 	private ProjectService service;

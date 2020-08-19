@@ -7,16 +7,16 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pmt.models.Activity;
+import com.pmt.models.Sprint;
 import com.pmt.models.Employee;
 import com.pmt.models.Project;
-import com.pmt.repos.ActivityRepo;
+import com.pmt.repos.SprintRepo;
 
 @Service
-public class ActivityService {
+public class TaskService {
 
 	@Autowired
-	private ActivityRepo repo;
+	private SprintRepo repo;
 
 	@Autowired
 	private EmployeeService empservice;
@@ -25,18 +25,18 @@ public class ActivityService {
 	private ProjectService projectService;
 
 	// fetching all projects
-	public List<Activity> getAllActivities() {
-		List<Activity> list = (List<Activity>) repo.findAll();
+	public List<Sprint> getAllActivities() {
+		List<Sprint> list = (List<Sprint>) repo.findAll();
 		return list;
 	}
 
 	// fetching project by id
-	public Activity getActivity(UUID id) {
+	public Sprint getActivity(UUID id) {
 		return repo.getOne(id);
 	}
 
 	// inserting project
-	public UUID addActivity(Activity c) {
+	public UUID addActivity(Sprint c) {
 		c.setActcreatedBy(empservice.getEmployee(c.getActcreatedBy().getId()));
 		c.setProj(projectService.getProject(c.getProj().getId()));
 		Date dtCreated = new Date();
@@ -46,7 +46,7 @@ public class ActivityService {
 	}
 
 	// updating project by id
-	public void updateActivity(Activity project, UUID id) {
+	public void updateActivity(Sprint project, UUID id) {
 		if (id == project.getId()) {
 			Date dtUpdated = new Date();
 			project.setDtUpdated(dtUpdated);
@@ -65,7 +65,7 @@ public class ActivityService {
 	}
 
 	// patching/updating project by id
-	public void patchActivity(Activity emp, UUID id) {
+	public void patchActivity(Sprint emp, UUID id) {
 		if (id == emp.getId()) {
 			repo.save(emp);
 		}
@@ -73,11 +73,11 @@ public class ActivityService {
 
 	public void defaultActivity(Project p, Employee e, Date d) {
 
-		Activity a1 = new Activity("Strategy", "Open", p, e, d, d);
-		Activity a2 = new Activity("Design", "Open", p, e, d, d);
-		Activity a3 = new Activity("Development", "Open", p, e, d, d);
-		Activity a4 = new Activity("Testing", "Open", p, e, d, d);
-		Activity a5 = new Activity("Deliverables", "Open", p, e, d, d);
+		Sprint a1 = new Sprint("Strategy", "Open", p, e, d, d);
+		Sprint a2 = new Sprint("Design", "Open", p, e, d, d);
+		Sprint a3 = new Sprint("Development", "Open", p, e, d, d);
+		Sprint a4 = new Sprint("Testing", "Open", p, e, d, d);
+		Sprint a5 = new Sprint("Deliverables", "Open", p, e, d, d);
 		repo.save(a1);
 		repo.save(a2);
 		repo.save(a3);

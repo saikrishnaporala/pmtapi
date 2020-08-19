@@ -83,6 +83,10 @@ public class Employee {
 			CascadeType.REFRESH })
 	private List<Project> projects;
 
+	@ManyToMany(targetEntity = Task.class, cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE,
+			CascadeType.REFRESH })
+	private List<Task> tasks;
+
 	public Employee() {
 	}
 
@@ -254,10 +258,28 @@ public class Employee {
 		this.user = user;
 	}
 
-	/*
-	 * public List<Project> getProj() { return proj; }
-	 * 
-	 * public void setProj(List<Project> proj) { this.proj = proj; }
-	 */
+	public List<Project> getProj() {
+		return proj;
+	}
+
+	public void setProj(List<Project> proj) {
+		this.proj = proj;
+	}
+
+	public List<Project> getProjects() {
+		return projects;
+	}
+
+	public void setProjects(List<Project> projects) {
+		this.projects = projects;
+	}
+
+	public List<Task> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(List<Task> tasks) {
+		this.tasks = tasks;
+	}
 
 }

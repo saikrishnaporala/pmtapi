@@ -15,7 +15,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-public class Activity {
+public class Sprint {
 
 	@Id
 	@GeneratedValue(generator = "uuid2")
@@ -97,7 +97,7 @@ public class Activity {
 		this.proj = proj;
 	}
 
-	public Activity(String activityName, String status, Project proj, Employee actcreatedBy, Date dtCreated,
+	public Sprint(String activityName, String status, Project proj, Employee actcreatedBy, Date dtCreated,
 			Date dtUpdated) {
 		super();
 		this.activityName = activityName;

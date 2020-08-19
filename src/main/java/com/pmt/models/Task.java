@@ -12,13 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * The persistent class for the users database table.
@@ -27,15 +24,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * 
  */
 @Entity
-public class Project {
+public class Task {
 	@Id
 	@GeneratedValue(generator = "uuid2")
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
 	@Column(name = "id", columnDefinition = "BINARY(16)")
 	private UUID id;
 
-	private String projName;
-	private String client; // object
+	private String taskName;
+
+	@ManyToOne
+	@JoinColumn(name = "act_id")
+	private Sprint activity; // object
+
+	private String taskType;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "start_date")
@@ -45,10 +47,8 @@ public class Project {
 	@Column(name = "end_date")
 	private Date endDate;
 
-	private int rate;
-	private String ratebasedOn;
 	private String priority;
-	private String projDescr;
+	private String taskDescr;
 	private String skills;
 	private String tools;
 	private String status;
@@ -62,47 +62,43 @@ public class Project {
 	@Column(name = "dt_updated")
 	private Date dtUpdated;
 
-	@ManyToOne
-	@JoinColumn(name = "company_id")
-	private Company company;
+	private String review;
+	private String revision;
+	private String comments;
 
 	@ManyToOne
 	@JoinColumn(name = "emp_id")
 	private Employee createdBy;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "proj", cascade = CascadeType.ALL)
-	private List<Sprint> activity;
-
-	@ManyToMany(targetEntity = Employee.class, mappedBy = "projects", cascade = { CascadeType.PERSIST,
-			CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH })
+	@ManyToMany(targetEntity = Employee.class, mappedBy = "tasks", cascade = { CascadeType.PERSIST, CascadeType.DETACH,
+			CascadeType.MERGE, CascadeType.REFRESH })
 	private List<Employee> employees;
 
-	public Project() {
+	public Task() {
 	}
 
-	public UUID getId() {
-		return id;
+	public String getTaskName() {
+		return taskName;
 	}
 
-	public void setId(UUID id) {
-		this.id = id;
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
 	}
 
-	public String getProjName() {
-		return projName;
+	public Sprint getActivity() {
+		return activity;
 	}
 
-	public void setProjName(String projName) {
-		this.projName = projName;
+	public void setActivity(Sprint activity) {
+		this.activity = activity;
 	}
 
-	public String getClient() {
-		return client;
+	public String getTaskType() {
+		return taskType;
 	}
 
-	public void setClient(String client) {
-		this.client = client;
+	public void setTaskType(String taskType) {
+		this.taskType = taskType;
 	}
 
 	public Date getStartDate() {
@@ -121,22 +117,6 @@ public class Project {
 		this.endDate = endDate;
 	}
 
-	public int getRate() {
-		return rate;
-	}
-
-	public void setRate(int rate) {
-		this.rate = rate;
-	}
-
-	public String getRatebasedOn() {
-		return ratebasedOn;
-	}
-
-	public void setRatebasedOn(String ratebasedOn) {
-		this.ratebasedOn = ratebasedOn;
-	}
-
 	public String getPriority() {
 		return priority;
 	}
@@ -145,12 +125,12 @@ public class Project {
 		this.priority = priority;
 	}
 
-	public String getProjDescr() {
-		return projDescr;
+	public String getTaskDescr() {
+		return taskDescr;
 	}
 
-	public void setProjDescr(String projDescr) {
-		this.projDescr = projDescr;
+	public void setTaskDescr(String taskDescr) {
+		this.taskDescr = taskDescr;
 	}
 
 	public String getSkills() {
@@ -201,12 +181,28 @@ public class Project {
 		this.dtUpdated = dtUpdated;
 	}
 
-	public Company getCompany() {
-		return company;
+	public String getReview() {
+		return review;
 	}
 
-	public void setCompany(Company company) {
-		this.company = company;
+	public void setReview(String review) {
+		this.review = review;
+	}
+
+	public String getRevision() {
+		return revision;
+	}
+
+	public void setRevision(String revision) {
+		this.revision = revision;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 
 	public Employee getCreatedBy() {
@@ -215,6 +211,24 @@ public class Project {
 
 	public void setCreatedBy(Employee createdBy) {
 		this.createdBy = createdBy;
+	}
+
+	public List<Employee> getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
+	}
+
+	@Override
+	public String toString() {
+		return "Task [id=" + id + ", taskName=" + taskName + ", activity=" + activity + ", taskType=" + taskType
+				+ ", startDate=" + startDate + ", endDate=" + endDate + ", priority=" + priority + ", taskDescr="
+				+ taskDescr + ", skills=" + skills + ", tools=" + tools + ", status=" + status + ", isactive="
+				+ isactive + ", dtCreated=" + dtCreated + ", dtUpdated=" + dtUpdated + ", review=" + review
+				+ ", revision=" + revision + ", comments=" + comments + ", createdBy=" + createdBy + ", employees="
+				+ employees + "]";
 	}
 
 }

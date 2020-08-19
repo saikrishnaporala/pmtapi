@@ -24,7 +24,7 @@ public class ProjectService {
 	private CompanyService companyService;
 
 	@Autowired
-	private ActivityService activityService;
+	private SprintService activityService;
 
 	// fetching all projects
 	public List<Project> getAllProjects() {
