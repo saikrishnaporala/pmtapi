@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pmt.models.Department;
+import com.pmt.models.ResponseModel;
 import com.pmt.services.DepartmentService;
 
 @CrossOrigin("http://localhost:8080")
@@ -48,14 +49,15 @@ public class DeptController {
 	// inserting dept
 	@PostMapping("/create")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<UUID> addDepts(@RequestBody Department dept) {
-		return new ResponseEntity<>(service.addDepartment(dept), HttpStatus.CREATED);
+	public ResponseEntity<Department> addDepts(@RequestBody Department dept) {
+		return new ResponseEntity<>(service.CUDept(dept), HttpStatus.CREATED);
 	}
 
 	// updating dept by id
 	@PutMapping("/{id}")
-	public void updateDept(@RequestBody Department e, @PathVariable UUID id) {
-		service.updateDepartment(e, id);
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Department> updateDept(@RequestBody Department e, @PathVariable UUID id) {
+		return new ResponseEntity<>(service.CUDept(e), HttpStatus.OK);
 	}
 
 	// deleting all dept
@@ -66,8 +68,9 @@ public class DeptController {
 
 	// deleting dept by id
 	@DeleteMapping("/{id}")
-	public void deleteDeptByID(@RequestBody Department e, @PathVariable UUID id) {
-		service.deleteDepartmentByID(id);
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<ResponseModel> deleteDeptByID(@PathVariable UUID id) {
+		return new ResponseEntity<>(service.deleteDepartmentByID(id), HttpStatus.OK);
 	}
 
 	// updating/ patching dept by id

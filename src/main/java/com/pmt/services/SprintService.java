@@ -71,7 +71,7 @@ public class SprintService {
 		}
 	}
 
-	public void defaultSprint(Project p, Employee e, Date d) {
+	public String defaultSprint(Project p, Employee e, Date d) {
 
 		Sprint a1 = new Sprint("Strategy", "Open", p, e, d, d);
 		Sprint a2 = new Sprint("Design", "Open", p, e, d, d);
@@ -83,5 +83,6 @@ public class SprintService {
 		repo.save(a3);
 		repo.save(a4);
 		repo.save(a5);
+		return "SUCCESS";
 	}
 }

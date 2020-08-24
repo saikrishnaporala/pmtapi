@@ -45,9 +45,10 @@ public class EmployeeService {
 
 	// updating employee by id
 	public void updateEmployee(Employee user, UUID id) {
-		if (id == user.getId()) {
-			Date dtUpdated = new Date();
-			user.setDtUpdated(dtUpdated);
+		System.out.println(user.getId());
+		System.out.println(id);
+		if (id.equals(user.getId())) {
+			user.setDtUpdated(new Date());
 			repo.save(user);
 		}
 	}

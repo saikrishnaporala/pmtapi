@@ -45,7 +45,8 @@ public class ProjectService {
 		Date dtCreated = new Date();
 		c.setDtCreated(dtCreated);
 		repo.save(c);
-		sprintService.defaultSprint(c, e, dtCreated);
+		String status = sprintService.defaultSprint(c, e, dtCreated);
+		System.out.println(status);
 		return c.getId();
 	}
 

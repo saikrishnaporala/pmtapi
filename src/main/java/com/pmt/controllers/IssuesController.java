@@ -25,7 +25,7 @@ import com.pmt.services.ProjectService;
 
 @CrossOrigin("http://localhost:8080")
 @RestController
-@RequestMapping("/activity")
+@RequestMapping("/issues")
 public class IssuesController {
 
 	static final Logger logger = LogManager.getLogger(IssuesController.class.getName());

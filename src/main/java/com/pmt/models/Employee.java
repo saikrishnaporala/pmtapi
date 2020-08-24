@@ -42,6 +42,9 @@ public class Employee {
 	private String personalEmail;
 	private Long mob;
 	private int roleType;
+	private String designation;
+	private String joinDate;
+	private String endDate;
 	private String skypeId;
 	private String twitterId;
 	private String linkedinId;
@@ -49,6 +52,7 @@ public class Employee {
 	private byte isAgree;
 	private byte isEmail;
 	private String photo;
+	private String aboutme;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dt_created")
@@ -162,6 +166,30 @@ public class Employee {
 		this.roleType = roleType;
 	}
 
+	public String getDesignation() {
+		return designation;
+	}
+
+	public void setDesignation(String designation) {
+		this.designation = designation;
+	}
+
+	public String getJoinDate() {
+		return joinDate;
+	}
+
+	public void setJoinDate(String joinDate) {
+		this.joinDate = joinDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+
 	public String getSkypeId() {
 		return skypeId;
 	}
@@ -216,6 +244,14 @@ public class Employee {
 
 	public void setPhoto(String photo) {
 		this.photo = photo;
+	}
+
+	public String getAboutme() {
+		return aboutme;
+	}
+
+	public void setAboutme(String aboutme) {
+		this.aboutme = aboutme;
 	}
 
 	public Date getDtCreated() {

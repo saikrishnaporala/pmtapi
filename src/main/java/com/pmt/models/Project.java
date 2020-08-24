@@ -74,6 +74,10 @@ public class Project {
 	@OneToMany(mappedBy = "proj", cascade = CascadeType.ALL)
 	private List<Sprint> activity;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+	private List<Issues> issues;
+
 	@ManyToMany(targetEntity = Employee.class, mappedBy = "projects", cascade = { CascadeType.PERSIST,
 			CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH })
 	private List<Employee> employees;
