@@ -20,59 +20,59 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pmt.models.Project;
-import com.pmt.services.ProjectService;
+import com.pmt.models.Task;
+import com.pmt.services.TaskService;
 
 @CrossOrigin("http://localhost:8080")
 @RestController
-@RequestMapping("/activity")
+@RequestMapping("/task")
 public class TaskController {
 
 	static final Logger logger = LogManager.getLogger(TaskController.class.getName());
 
 	@Autowired
-	private ProjectService service;
+	private TaskService service;
 
-	// displaying list of all projects
+	// displaying list of all tasks
 	@GetMapping("/")
-	public List<Project> getAllProject() {
-		return service.getAllProjects();
+	public List<Task> getAllTask() {
+		return service.getAllTasks();
 	}
 
-	// displaying project by id
+	// displaying task by id
 	@GetMapping("/{id}")
-	public Project getProject(@PathVariable UUID id) {
-		return service.getProject(id);
+	public Task getTask(@PathVariable UUID id) {
+		return service.getTask(id);
 	}
 
-	// inserting project
-	@PostMapping("/register")
+	// inserting task
+	@PostMapping("/create")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<UUID> addProjects(@RequestBody Project project) {
-		return new ResponseEntity<>(service.addProject(project), HttpStatus.CREATED);
+	public ResponseEntity<UUID> addTasks(@RequestBody Task task) {
+		return new ResponseEntity<>(service.addTask(task), HttpStatus.CREATED);
 	}
 
-	// updating project by id
+	// updating task by id
 	@PutMapping("/{id}")
-	public void updateProject(@RequestBody Project e, @PathVariable UUID id) {
-		service.updateProject(e, id);
+	public void updateTask(@RequestBody Task e, @PathVariable UUID id) {
+		service.updateTask(e, id);
 	}
 
-	// deleting all projects
+	// deleting all tasks
 	@DeleteMapping("/")
-	public void deleteAllProjects() {
-		service.deleteAllProjects();
+	public void deleteAllTasks() {
+		service.deleteAllTasks();
 	}
 
-	// deleting project by id
+	// deleting task by id
 	@DeleteMapping("/{id}")
-	public void deleteProjectByID(@RequestBody Project e, @PathVariable UUID id) {
-		service.deleteProjectByID(id);
+	public void deleteTaskByID(@RequestBody Task e, @PathVariable UUID id) {
+		service.deleteTaskByID(id);
 	}
 
-	// updating/ patching project by id
+	// updating/ patching task by id
 	@PatchMapping("/{id}")
-	public void patchProjectByID(@RequestBody Project e, @PathVariable UUID id) {
-		service.patchProject(e, id);
+	public void patchTaskByID(@RequestBody Task e, @PathVariable UUID id) {
+		service.patchTask(e, id);
 	}
 }

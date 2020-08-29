@@ -20,59 +20,59 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pmt.models.Project;
-import com.pmt.services.ProjectService;
+import com.pmt.models.Issue;
+import com.pmt.services.IssueService;
 
 @CrossOrigin("http://localhost:8080")
 @RestController
 @RequestMapping("/issues")
-public class IssuesController {
+public class IssueController {
 
-	static final Logger logger = LogManager.getLogger(IssuesController.class.getName());
+	static final Logger logger = LogManager.getLogger(IssueController.class.getName());
 
 	@Autowired
-	private ProjectService service;
+	private IssueService service;
 
-	// displaying list of all projects
+	// displaying list of all issues
 	@GetMapping("/")
-	public List<Project> getAllProject() {
-		return service.getAllProjects();
+	public List<Issue> getAllIssue() {
+		return service.getAllIssues();
 	}
 
-	// displaying project by id
+	// displaying issue by id
 	@GetMapping("/{id}")
-	public Project getProject(@PathVariable UUID id) {
-		return service.getProject(id);
+	public Issue getIssue(@PathVariable UUID id) {
+		return service.getIssue(id);
 	}
 
-	// inserting project
-	@PostMapping("/register")
+	// inserting issue
+	@PostMapping("/create")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<UUID> addProjects(@RequestBody Project project) {
-		return new ResponseEntity<>(service.addProject(project), HttpStatus.CREATED);
+	public ResponseEntity<UUID> addIssues(@RequestBody Issue issue) {
+		return new ResponseEntity<>(service.addIssue(issue), HttpStatus.CREATED);
 	}
 
-	// updating project by id
+	// updating issue by id
 	@PutMapping("/{id}")
-	public void updateProject(@RequestBody Project e, @PathVariable UUID id) {
-		service.updateProject(e, id);
+	public void updateIssue(@RequestBody Issue e, @PathVariable UUID id) {
+		service.updateIssue(e, id);
 	}
 
-	// deleting all projects
+	// deleting all issues
 	@DeleteMapping("/")
-	public void deleteAllProjects() {
-		service.deleteAllProjects();
+	public void deleteAllIssues() {
+		service.deleteAllIssues();
 	}
 
-	// deleting project by id
+	// deleting issue by id
 	@DeleteMapping("/{id}")
-	public void deleteProjectByID(@RequestBody Project e, @PathVariable UUID id) {
-		service.deleteProjectByID(id);
+	public void deleteIssueByID(@RequestBody Issue e, @PathVariable UUID id) {
+		service.deleteIssueByID(id);
 	}
 
-	// updating/ patching project by id
+	// updating/ patching issue by id
 	@PatchMapping("/{id}")
-	public void patchProjectByID(@RequestBody Project e, @PathVariable UUID id) {
-		service.patchProject(e, id);
+	public void patchIssueByID(@RequestBody Issue e, @PathVariable UUID id) {
+		service.patchIssue(e, id);
 	}
 }

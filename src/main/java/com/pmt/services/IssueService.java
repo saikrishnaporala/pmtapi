@@ -1,5 +1,6 @@
 package com.pmt.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -8,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pmt.models.Employee;
-import com.pmt.models.Issues;
+import com.pmt.models.Issue;
 import com.pmt.models.Project;
 import com.pmt.repos.IssuesRepo;
 
 @Service
-public class IssuesService {
+public class IssueService {
 
 	@Autowired
 	private IssuesRepo repo;
@@ -27,26 +28,31 @@ public class IssuesService {
 	@Autowired
 	private SprintService sprintService;
 
-	// fetching all Issues
-	public List<Issues> getAllIssues() {
-		List<Issues> list = (List<Issues>) repo.findAll();
+	// fetching all Issue
+	public List<Issue> getAllIssues() {
+		List<Issue> list = (List<Issue>) repo.findAll();
 		return list;
 	}
 
 	// fetching issue by id
-	public Issues getIssues(UUID id) {
+	public Issue getIssue(UUID id) {
 		return repo.getOne(id);
 	}
 
 	// inserting issue
-	public UUID addIssues(Issues c) {
+	public UUID addIssue(Issue c) {
 		c.setCreatedBy(empservice.getEmployee(c.getCreatedBy().getId()));
-		if (c.getProject() == null) {
+		if (c.getProject() != null) {
 			c.setProject(projservice.getProject(c.getProject().getId()));
 		}
-		if (c.getSprint() == null) {
+		if (c.getSprint() != null) {
 			c.setSprint(sprintService.getSprint(c.getSprint().getId()));
 		}
+		List<Employee> l = new ArrayList<Employee>();
+		c.getEmployees().forEach(item -> {
+			l.add(empservice.getEmployee(item.getId()));
+		});
+		c.setEmployees(l);
 		Date dtCreated = new Date();
 		c.setDtCreated(dtCreated);
 		repo.save(c);
@@ -54,7 +60,7 @@ public class IssuesService {
 	}
 
 	// updating issue by id
-	public void updateIssues(Issues obj, UUID id) {
+	public void updateIssue(Issue obj, UUID id) {
 		if (id == obj.getId()) {
 			Date dtUpdated = new Date();
 			obj.setDtUpdated(dtUpdated);
@@ -68,12 +74,12 @@ public class IssuesService {
 	}
 
 	// deleting issue by id
-	public void deleteIssuesByID(UUID id) {
+	public void deleteIssueByID(UUID id) {
 		repo.deleteById(id);
 	}
 
 	// patching/updating issue by id
-	public void patchIssues(Issues obj, UUID id) {
+	public void patchIssue(Issue obj, UUID id) {
 		if (id == obj.getId()) {
 			repo.save(obj);
 		}
@@ -82,10 +88,10 @@ public class IssuesService {
 	public void defaultIssues(Project p, Employee e, Date d) {
 
 		/*
-		 * Issues a1 = new Issues("Strategy", "Open", p, e, d, d); Issues a2 = new
-		 * Issues("Design", "Open", p, e, d, d); Issues a3 = new Issues("Development",
-		 * "Open", p, e, d, d); Issues a4 = new Issues("Testing", "Open", p, e, d, d);
-		 * Issues a5 = new Issues("Deliverables", "Open", p, e, d, d); repo.save(a1);
+		 * Issue a1 = new Issue("Strategy", "Open", p, e, d, d); Issue a2 = new
+		 * Issue("Design", "Open", p, e, d, d); Issue a3 = new Issue("Development",
+		 * "Open", p, e, d, d); Issue a4 = new Issue("Testing", "Open", p, e, d, d);
+		 * Issue a5 = new Issue("Deliverables", "Open", p, e, d, d); repo.save(a1);
 		 * repo.save(a2); repo.save(a3); repo.save(a4); repo.save(a5);
 		 */
 	}

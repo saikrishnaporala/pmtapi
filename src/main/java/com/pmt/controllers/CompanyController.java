@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pmt.models.Company;
+import com.pmt.models.Company_dto;
 import com.pmt.services.CompanyService;
 
 @CrossOrigin("http://localhost:8080")
@@ -48,7 +50,7 @@ public class CompanyController {
 	// inserting company
 	@PostMapping("/compregister")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<UUID> addCompanys(@RequestBody Company company) {
+	public ResponseEntity<UUID> addCompanys(@ModelAttribute Company_dto company) {
 		return new ResponseEntity<>(companyService.addCompany(company), HttpStatus.CREATED);
 	}
 

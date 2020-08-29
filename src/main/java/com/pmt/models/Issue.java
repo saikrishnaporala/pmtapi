@@ -24,7 +24,7 @@ import org.hibernate.annotations.GenericGenerator;
  * 
  */
 @Entity
-public class Issues {
+public class Issue {
 	@Id
 	@GeneratedValue(generator = "uuid2")
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
@@ -65,7 +65,6 @@ public class Issues {
 	private Date dtUpdated;
 
 	private String review;
-	private String revision;
 	private String comments;
 
 	@ManyToOne
@@ -76,7 +75,7 @@ public class Issues {
 			CascadeType.MERGE, CascadeType.REFRESH })
 	private List<Employee> employees;
 
-	public Issues() {
+	public Issue() {
 	}
 
 	public UUID getId() {
@@ -191,14 +190,6 @@ public class Issues {
 		this.review = review;
 	}
 
-	public String getRevision() {
-		return revision;
-	}
-
-	public void setRevision(String revision) {
-		this.revision = revision;
-	}
-
 	public String getComments() {
 		return comments;
 	}
@@ -223,12 +214,10 @@ public class Issues {
 		this.employees = employees;
 	}
 
-	public Issues(UUID id, String issueSubject, String issueType, Sprint sprint, Project project, Date startDate,
-			Date endDate, String priority, String issueDescr, String status, byte isactive, Date dtCreated,
-			Date dtUpdated, String review, String revision, String comments, Employee createdBy,
-			List<Employee> employees) {
+	public Issue(String issueSubject, String issueType, Sprint sprint, Project project, Date startDate, Date endDate,
+			String priority, String issueDescr, String status, byte isactive, Date dtCreated, Date dtUpdated,
+			String review, String comments, Employee createdBy, List<Employee> employees) {
 		super();
-		this.id = id;
 		this.issueSubject = issueSubject;
 		this.issueType = issueType;
 		this.sprint = sprint;
@@ -242,7 +231,6 @@ public class Issues {
 		this.dtCreated = dtCreated;
 		this.dtUpdated = dtUpdated;
 		this.review = review;
-		this.revision = revision;
 		this.comments = comments;
 		this.createdBy = createdBy;
 		this.employees = employees;
@@ -250,11 +238,11 @@ public class Issues {
 
 	@Override
 	public String toString() {
-		return "Issues [id=" + id + ", issueSubject=" + issueSubject + ", issueType=" + issueType + ", sprint=" + sprint
+		return "Issue [id=" + id + ", issueSubject=" + issueSubject + ", issueType=" + issueType + ", sprint=" + sprint
 				+ ", project=" + project + ", startDate=" + startDate + ", endDate=" + endDate + ", priority="
 				+ priority + ", issueDescr=" + issueDescr + ", status=" + status + ", isactive=" + isactive
-				+ ", dtCreated=" + dtCreated + ", dtUpdated=" + dtUpdated + ", review=" + review + ", revision="
-				+ revision + ", comments=" + comments + ", createdBy=" + createdBy + ", employees=" + employees + "]";
+				+ ", dtCreated=" + dtCreated + ", dtUpdated=" + dtUpdated + ", review=" + review + ", comments="
+				+ comments + ", createdBy=" + createdBy + ", employees=" + employees + "]";
 	}
 
 }

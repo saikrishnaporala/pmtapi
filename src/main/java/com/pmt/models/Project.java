@@ -76,7 +76,7 @@ public class Project {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-	private List<Issues> issues;
+	private List<Issue> issues;
 
 	@ManyToMany(targetEntity = Employee.class, mappedBy = "projects", cascade = { CascadeType.PERSIST,
 			CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH })

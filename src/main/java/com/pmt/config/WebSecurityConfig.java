@@ -60,7 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/authenticate", "/user/register", "/user/users", "/employee/register", "/employee/",
 						"/dept/create", "/dept/", "/dept/{id}", "/employee/{id}", "/company/companies",
-						"/company/compregister", "/project/register", "/project/")
+						"/company/compregister", "/project/register", "/project/", "/sprint/", "/sprint/pid/{id}",
+						"/task/create", "/task/", "/issues/create")
 				.permitAll()
 				// all other requests need to be authenticated
 				.anyRequest().authenticated().and().

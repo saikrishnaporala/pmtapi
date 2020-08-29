@@ -1,5 +1,6 @@
 package com.pmt.services;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -37,7 +38,7 @@ public class SprintService {
 
 	// inserting sprint
 	public UUID addSprint(Sprint c) {
-		c.setActcreatedBy(empservice.getEmployee(c.getActcreatedBy().getId()));
+		c.setSprintcreatedBy(empservice.getEmployee(c.getSprintcreatedBy().getId()));
 		c.setProj(projectService.getProject(c.getProj().getId()));
 		Date dtCreated = new Date();
 		c.setDtCreated(dtCreated);
@@ -73,16 +74,25 @@ public class SprintService {
 
 	public String defaultSprint(Project p, Employee e, Date d) {
 
-		Sprint a1 = new Sprint("Strategy", "Open", p, e, d, d);
-		Sprint a2 = new Sprint("Design", "Open", p, e, d, d);
-		Sprint a3 = new Sprint("Development", "Open", p, e, d, d);
-		Sprint a4 = new Sprint("Testing", "Open", p, e, d, d);
-		Sprint a5 = new Sprint("Deliverables", "Open", p, e, d, d);
+		Sprint a1 = new Sprint("Strategy", "Open", 1, p, e, d, d);
+		Sprint a2 = new Sprint("Design", "Open", 2, p, e, d, d);
+		Sprint a3 = new Sprint("Development", "Open", 3, p, e, d, d);
+		Sprint a4 = new Sprint("Testing", "Open", 4, p, e, d, d);
+		Sprint a5 = new Sprint("Deliverables", "Open", 5, p, e, d, d);
 		repo.save(a1);
 		repo.save(a2);
 		repo.save(a3);
 		repo.save(a4);
 		repo.save(a5);
 		return "SUCCESS";
+	}
+
+	public List<Sprint> getAllSprintsByPID(UUID id) {
+		System.out.println("pid: " + id);
+		Project proj = new Project();
+		proj.setId(id);
+		List<Sprint> list = (List<Sprint>) repo.findByProj(proj);
+		list.sort(Comparator.comparing(Sprint::getSeq));
+		return list;
 	}
 }

@@ -1,5 +1,6 @@
 package com.pmt.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -38,6 +39,11 @@ public class TaskService {
 	// inserting task
 	public UUID addTask(Task c) {
 		c.setCreatedBy(empservice.getEmployee(c.getCreatedBy().getId()));
+		List<Employee> l = new ArrayList<Employee>();
+		c.getEmployees().forEach(item -> {
+			l.add(empservice.getEmployee(item.getId()));
+		});
+		c.setEmployees(l);
 		c.setSprint(sprintService.getSprint(c.getSprint().getId()));
 		Date dtCreated = new Date();
 		c.setDtCreated(dtCreated);

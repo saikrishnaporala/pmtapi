@@ -39,6 +39,11 @@ public class SprintController {
 		return service.getAllSprints();
 	}
 
+	@GetMapping("/pid/{id}")
+	public List<Sprint> getAllSprint(@PathVariable UUID id) {
+		return service.getAllSprintsByPID(id);
+	}
+
 	// displaying sprint by id
 	@GetMapping("/{id}")
 	public Sprint getSprint(@PathVariable UUID id) {

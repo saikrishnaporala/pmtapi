@@ -1,17 +1,23 @@
 package com.pmt.services;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.pmt.config.ImageUpload;
 import com.pmt.models.Company;
+import com.pmt.models.Company_dto;
 import com.pmt.repos.CompanyRepo;
 
 @Service
 public class CompanyService {
+
+	private static String UPLOAD_DIR = "http://localhost:8080/companyprofiles/";
 
 	@Autowired
 	private CompanyRepo companyRepository;
@@ -35,10 +41,22 @@ public class CompanyService {
 	}
 
 	// inserting company
-	public UUID addCompany(Company c) {
-		Company res = companyRepository.save(c);
-		Date dtCreated = new Date();
-		c.setCreated(dtCreated);
+	public UUID addCompany(Company_dto c) {
+		String result = "";
+		MultipartFile m = c.getLogo();
+		String s = m.getOriginalFilename();
+		Company c1 = mappingDTO(c, s);
+		c1.setCreated(new Date());
+		Company res = companyRepository.save(c1);
+		s = res.getId().toString();
+
+		try {
+			ImageUpload fu = new ImageUpload();
+			result = fu.saveUploadedFiles(c.getLogo(), s);
+			System.out.println(result);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return res.getId();
 	}
 
@@ -64,5 +82,35 @@ public class CompanyService {
 		if (id == emp.getId()) {
 			companyRepository.save(emp);
 		}
+	}
+
+	private Company mappingDTO(Company_dto c, String result) {
+		Company c1 = new Company();
+		c1.setCompanyName(c.getCompanyName());
+		c1.setContactPerson(c.getContactPerson());
+		c1.setLogo(result);
+		c1.setAddress1(c.getAddress1());
+		c1.setAddress2(c.getAddress2());
+		c1.setCity(c.getCity());
+		c1.setState(c.getState());
+		c1.setCountry(c.getCountry());
+		c1.setZip(c.getZip());
+		c1.setPhone(c.getPhone());
+		c1.setFax(c.getFax());
+		c1.setEmail(c.getEmail());
+		c1.setWebsite(c.getWebsite());
+		c1.setLegalStatus(c.getLegalStatus());
+		c1.setEstdYear(c.getEstdYear());
+		c1.setEmpcount(c.getEmpcount());
+		c1.setAccessempcount(c.getAccessempcount());
+		c1.setBusinessType(c.getBusinessType());
+		c1.setAboutme(c.getAboutme());
+		c1.setIsActive(c.getIsActive());
+		c1.setCreated(c.getCreated());
+		c1.setModified(c.getModified());
+		c1.setTeams(c.getTeams());
+		c1.setDept(c.getDept());
+		c1.setEmployee(c.getEmployee());
+		return c1;
 	}
 }

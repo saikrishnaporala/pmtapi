@@ -22,16 +22,20 @@ public class Sprint {
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
 	@Column(name = "id", columnDefinition = "BINARY(16)")
 	private UUID id;
-	private String activityName;
+	private String sprintName;
 	private String status;
+	private int seq;
 
 	@ManyToOne
 	@JoinColumn(name = "proj_id")
 	private Project proj;
 
+	public Sprint() {
+	}
+
 	@ManyToOne
 	@JoinColumn(name = "emp_id")
-	private Employee actcreatedBy;
+	private Employee sprintcreatedBy;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dt_created")
@@ -49,12 +53,12 @@ public class Sprint {
 		this.id = id;
 	}
 
-	public String getActivityName() {
-		return activityName;
+	public String getSprintName() {
+		return sprintName;
 	}
 
-	public void setActivityName(String activityName) {
-		this.activityName = activityName;
+	public void setSprintName(String sprintName) {
+		this.sprintName = sprintName;
 	}
 
 	public String getStatus() {
@@ -65,12 +69,28 @@ public class Sprint {
 		this.status = status;
 	}
 
-	public Employee getActcreatedBy() {
-		return actcreatedBy;
+	public int getSeq() {
+		return seq;
 	}
 
-	public void setActcreatedBy(Employee actcreatedBy) {
-		this.actcreatedBy = actcreatedBy;
+	public void setSeq(int seq) {
+		this.seq = seq;
+	}
+
+	public Project getProj() {
+		return proj;
+	}
+
+	public void setProj(Project proj) {
+		this.proj = proj;
+	}
+
+	public Employee getSprintcreatedBy() {
+		return sprintcreatedBy;
+	}
+
+	public void setSprintcreatedBy(Employee sprintcreatedBy) {
+		this.sprintcreatedBy = sprintcreatedBy;
 	}
 
 	public Date getDtCreated() {
@@ -89,29 +109,16 @@ public class Sprint {
 		this.dtUpdated = dtUpdated;
 	}
 
-	public Project getProj() {
-		return proj;
-	}
-
-	public void setProj(Project proj) {
-		this.proj = proj;
-	}
-
-	public Sprint(String activityName, String status, Project proj, Employee actcreatedBy, Date dtCreated,
+	public Sprint(String sprintName, String status, int seq, Project proj, Employee sprintcreatedBy, Date dtCreated,
 			Date dtUpdated) {
 		super();
-		this.activityName = activityName;
+		this.sprintName = sprintName;
 		this.status = status;
+		this.seq = seq;
 		this.proj = proj;
-		this.actcreatedBy = actcreatedBy;
+		this.sprintcreatedBy = sprintcreatedBy;
 		this.dtCreated = dtCreated;
 		this.dtUpdated = dtUpdated;
-	}
-
-	@Override
-	public String toString() {
-		return "Activity [id=" + id + ", activityName=" + activityName + ", status=" + status + ", proj=" + proj
-				+ ", createdBy=" + actcreatedBy + ", dtCreated=" + dtCreated + ", dtUpdated=" + dtUpdated + "]";
 	}
 
 }
