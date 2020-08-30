@@ -1,5 +1,6 @@
 package com.pmt.controllers;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,6 +43,13 @@ public class CompanyController {
 	}
 
 	// displaying company by id
+	@GetMapping("/{companyName}")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<String> getCompany(@PathVariable String companyName) {
+		return new ResponseEntity<>(companyService.getCompanyByName(companyName), HttpStatus.CREATED);
+	}
+
+	// displaying company by id
 	@GetMapping("/companies/{id}")
 	public Company getCompany(@PathVariable UUID id) {
 		return companyService.getCompany(id);
@@ -50,7 +58,7 @@ public class CompanyController {
 	// inserting company
 	@PostMapping("/compregister")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<UUID> addCompanys(@ModelAttribute Company_dto company) {
+	public ResponseEntity<UUID> addCompanys(@ModelAttribute Company_dto company) throws IOException {
 		return new ResponseEntity<>(companyService.addCompany(company), HttpStatus.CREATED);
 	}
 

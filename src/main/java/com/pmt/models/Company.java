@@ -35,6 +35,7 @@ public class Company {
 	@Column(name = "id", columnDefinition = "BINARY(16)")
 	private UUID id;
 
+	@Column(unique = true)
 	private String companyName;
 	private String contactPerson;
 	private String logo;

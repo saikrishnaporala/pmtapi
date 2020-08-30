@@ -8,4 +8,5 @@ import com.pmt.models.Employee;
 
 public interface EmployeeRepo extends JpaRepository<Employee, UUID> {
 
+	public Employee findByEmpid(int empid);
 }

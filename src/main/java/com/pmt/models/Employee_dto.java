@@ -18,6 +18,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * 
  */
 @Entity
-public class Employee {
+public class Employee_dto {
 	@Id
 	@GeneratedValue(generator = "uuid2")
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
@@ -51,7 +52,7 @@ public class Employee {
 	private byte isactive;
 	private byte isAgree;
 	private byte isEmail;
-	private String photo;
+	private MultipartFile photo;
 	private String aboutme;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -91,7 +92,7 @@ public class Employee {
 			CascadeType.REFRESH })
 	private List<Task> tasks;
 
-	public Employee() {
+	public Employee_dto() {
 	}
 
 	public UUID getId() {
@@ -238,11 +239,11 @@ public class Employee {
 		this.isEmail = isEmail;
 	}
 
-	public String getPhoto() {
+	public MultipartFile getPhoto() {
 		return photo;
 	}
 
-	public void setPhoto(String photo) {
+	public void setPhoto(MultipartFile photo) {
 		this.photo = photo;
 	}
 
@@ -315,42 +316,6 @@ public class Employee {
 	}
 
 	public void setTasks(List<Task> tasks) {
-		this.tasks = tasks;
-	}
-
-	public Employee(UUID id, int empid, String firstName, String lastName, String officialEmail, String personalEmail,
-			Long mob, int roleType, String designation, String joinDate, String endDate, String skypeId,
-			String twitterId, String linkedinId, byte isactive, byte isAgree, byte isEmail, String photo,
-			String aboutme, Date dtCreated, Date dtUpdated, Company company, Team team, User user, Department dept,
-			List<Project> proj, List<Project> projects, List<Task> tasks) {
-		super();
-		this.id = id;
-		this.empid = empid;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.officialEmail = officialEmail;
-		this.personalEmail = personalEmail;
-		this.mob = mob;
-		this.roleType = roleType;
-		this.designation = designation;
-		this.joinDate = joinDate;
-		this.endDate = endDate;
-		this.skypeId = skypeId;
-		this.twitterId = twitterId;
-		this.linkedinId = linkedinId;
-		this.isactive = isactive;
-		this.isAgree = isAgree;
-		this.isEmail = isEmail;
-		this.photo = photo;
-		this.aboutme = aboutme;
-		this.dtCreated = dtCreated;
-		this.dtUpdated = dtUpdated;
-		this.company = company;
-		this.team = team;
-		this.user = user;
-		this.dept = dept;
-		this.proj = proj;
-		this.projects = projects;
 		this.tasks = tasks;
 	}
 

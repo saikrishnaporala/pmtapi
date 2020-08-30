@@ -45,6 +45,13 @@ public class EmployeeController {
 		return service.getEmployee(id);
 	}
 
+	// displaying company by id
+	@GetMapping("/check/{empid}")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<String> getEmployee(@PathVariable int empid) {
+		return new ResponseEntity<>(service.getEmployee(empid), HttpStatus.CREATED);
+	}
+
 	// inserting employee
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)

@@ -8,8 +8,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.pmt.config.ImageUpload;
 import com.pmt.models.Company;
 import com.pmt.models.Company_dto;
 import com.pmt.repos.CompanyRepo;
@@ -17,10 +17,11 @@ import com.pmt.repos.CompanyRepo;
 @Service
 public class CompanyService {
 
-	private static String UPLOAD_DIR = "http://localhost:8080/companyprofiles/";
-
 	@Autowired
 	private CompanyRepo companyRepository;
+
+	@Autowired
+	private FileStorageService imgl;
 
 	// fetching all companys
 	public List<Company> getAllCompanys() {
@@ -41,22 +42,22 @@ public class CompanyService {
 	}
 
 	// inserting company
-	public UUID addCompany(Company_dto c) {
-		String result = "";
+	public UUID addCompany(Company_dto c) throws IOException {
 		MultipartFile m = c.getLogo();
 		String s = m.getOriginalFilename();
 		Company c1 = mappingDTO(c, s);
 		c1.setCreated(new Date());
 		Company res = companyRepository.save(c1);
 		s = res.getId().toString();
+		String fileName = imgl.storeFile(m, s);
 
-		try {
-			ImageUpload fu = new ImageUpload();
-			result = fu.saveUploadedFiles(c.getLogo(), s);
-			System.out.println(result);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+				.path("/companyprofiles/" + s + "/").path(fileName).toUriString();
+		res.setLogo(fileDownloadUri);
+		companyRepository.save(res);
+		// ImageUpload fu = new ImageUpload();
+		// result = fu.uploadFile(m, s);
+		// System.out.println(result);
 		return res.getId();
 	}
 
@@ -112,5 +113,15 @@ public class CompanyService {
 		c1.setDept(c.getDept());
 		c1.setEmployee(c.getEmployee());
 		return c1;
+	}
+
+	public String getCompanyByName(String companyName) {
+		Company c = companyRepository.findByCompanyName(companyName);
+		if (c != null) {
+			return "exist";
+		} else {
+			return "notexist";
+		}
+
 	}
 }

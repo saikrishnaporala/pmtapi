@@ -8,4 +8,5 @@ import com.pmt.models.Company;
 
 public interface CompanyRepo extends JpaRepository<Company, UUID> {
 
+	public Company findByCompanyName(String companyName);
 }
