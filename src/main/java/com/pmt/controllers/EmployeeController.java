@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pmt.models.Employee;
+import com.pmt.models.Employee_dto;
 import com.pmt.services.EmployeeService;
 
 @CrossOrigin("http://localhost:8080")
@@ -32,6 +34,12 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService service;
+
+	// displaying list of all departments
+	@GetMapping("/accessToken")
+	public boolean getAcces() {
+		return true;
+	}
 
 	// displaying list of all employees
 	@GetMapping("/")
@@ -45,24 +53,30 @@ public class EmployeeController {
 		return service.getEmployee(id);
 	}
 
+	@GetMapping("/max")
+	public int getMaxEmployee() {
+		return service.getMaxEmployee();
+	}
+
 	// displaying company by id
-	@GetMapping("/check/{empid}")
+	@GetMapping("/check/{username}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<String> getEmployee(@PathVariable int empid) {
-		return new ResponseEntity<>(service.getEmployee(empid), HttpStatus.CREATED);
+	public ResponseEntity<String> getEmployee(@PathVariable String username) {
+		return new ResponseEntity<>(service.getEmployee(username), HttpStatus.CREATED);
 	}
 
 	// inserting employee
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<UUID> addEmployees(@RequestBody Employee obj) {
-		return new ResponseEntity<>(service.addEmployee(obj), HttpStatus.CREATED);
+	public ResponseEntity<UUID> addEmployees(@ModelAttribute Employee_dto obj) {
+		return new ResponseEntity<>(service.CUEmployee(obj), HttpStatus.CREATED);
 	}
 
 	// updating employee by id
-	@PutMapping("/{id}")
-	public void updateUser(@RequestBody Employee obj, @PathVariable UUID id) {
-		service.updateEmployee(obj, id);
+	@PutMapping("/")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<UUID> updateUser(@ModelAttribute Employee_dto obj) {
+		return new ResponseEntity<>(service.CUEmployee(obj), HttpStatus.CREATED);
 	}
 
 	// deleting all employees
@@ -73,7 +87,7 @@ public class EmployeeController {
 
 	// deleting employee by id
 	@DeleteMapping("/{id}")
-	public void deleteEmployeeByID(@RequestBody Employee obj, @PathVariable UUID id) {
+	public void deleteEmployeeByID(@PathVariable UUID id) {
 		service.deleteEmployeeByID(id);
 	}
 

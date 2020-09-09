@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pmt.models.Project;
+import com.pmt.models.dto.Project_dto;
 import com.pmt.services.ProjectService;
 
 @CrossOrigin("http://localhost:8080")
@@ -32,6 +34,12 @@ public class ProjectController {
 
 	@Autowired
 	private ProjectService service;
+
+	// displaying list of all departments
+	@GetMapping("/accessToken")
+	public boolean getAcces() {
+		return true;
+	}
 
 	// displaying list of all projects
 	@GetMapping("/")
@@ -48,14 +56,14 @@ public class ProjectController {
 	// inserting project
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<UUID> addProjects(@RequestBody Project project) {
-		return new ResponseEntity<>(service.addProject(project), HttpStatus.CREATED);
+	public ResponseEntity<UUID> addProjects(@ModelAttribute Project_dto obj) {
+		return new ResponseEntity<>(service.CUProject(obj), HttpStatus.CREATED);
 	}
 
 	// updating project by id
-	@PutMapping("/{id}")
-	public void updateProject(@RequestBody Project e, @PathVariable UUID id) {
-		service.updateProject(e, id);
+	@PutMapping("/")
+	public ResponseEntity<UUID> updateProject(@ModelAttribute Project_dto obj) {
+		return new ResponseEntity<>(service.CUProject(obj), HttpStatus.CREATED);
 	}
 
 	// deleting all projects
@@ -74,5 +82,11 @@ public class ProjectController {
 	@PatchMapping("/{id}")
 	public void patchProjectByID(@RequestBody Project e, @PathVariable UUID id) {
 		service.patchProject(e, id);
+	}
+
+	// displaying list of projects by empid
+	@GetMapping("/emp/{id}")
+	public List<Project> getAllProjectByEmp(@PathVariable UUID id) {
+		return service.getAllProjectsByEmp(id);
 	}
 }

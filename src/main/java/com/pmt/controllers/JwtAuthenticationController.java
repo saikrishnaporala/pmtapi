@@ -1,5 +1,7 @@
 package com.pmt.controllers;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,8 +35,10 @@ public class JwtAuthenticationController {
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 		final String token = jwtTokenUtil.generateToken(userDetails);
-
-		return ResponseEntity.ok(new JwtResponse(token));
+		final UUID empid = userDetailsService.loadUser(authenticationRequest.getUsername()).getId();
+		final String deptid = userDetailsService.loadUser(authenticationRequest.getUsername()).getDept().getDeptName();
+		final UUID compid = userDetailsService.loadUser(authenticationRequest.getUsername()).getCompany().getId();
+		return ResponseEntity.ok(new JwtResponse(token, empid, compid, deptid));
 	}
 
 	private void authenticate(String username, String password) throws Exception {

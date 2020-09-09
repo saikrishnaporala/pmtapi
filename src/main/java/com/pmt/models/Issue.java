@@ -1,7 +1,6 @@
 package com.pmt.models;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -10,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -41,7 +39,7 @@ public class Issue {
 
 	@ManyToOne
 	@JoinColumn(name = "proj_id")
-	private Project project; // object
+	private Project proj; // object
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "start_date")
@@ -67,13 +65,15 @@ public class Issue {
 	private String review;
 	private String comments;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "emp_id")
 	private Employee createdBy;
 
-	@ManyToMany(targetEntity = Employee.class, mappedBy = "tasks", cascade = { CascadeType.PERSIST, CascadeType.DETACH,
-			CascadeType.MERGE, CascadeType.REFRESH })
-	private List<Employee> employees;
+	/*
+	 * @ManyToMany(targetEntity = Employee.class, mappedBy = "tasks", cascade = {
+	 * CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE,
+	 * CascadeType.REFRESH }) private List<Employee> employees;
+	 */
 
 	public Issue() {
 	}
@@ -110,12 +110,12 @@ public class Issue {
 		this.sprint = sprint;
 	}
 
-	public Project getProject() {
-		return project;
+	public Project getProj() {
+		return proj;
 	}
 
-	public void setProject(Project project) {
-		this.project = project;
+	public void setProj(Project proj) {
+		this.proj = proj;
 	}
 
 	public Date getStartDate() {
@@ -206,22 +206,21 @@ public class Issue {
 		this.createdBy = createdBy;
 	}
 
-	public List<Employee> getEmployees() {
-		return employees;
-	}
+	/*
+	 * public List<Employee> getEmployees() { return employees; }
+	 * 
+	 * public void setEmployees(List<Employee> employees) { this.employees =
+	 * employees; }
+	 */
 
-	public void setEmployees(List<Employee> employees) {
-		this.employees = employees;
-	}
-
-	public Issue(String issueSubject, String issueType, Sprint sprint, Project project, Date startDate, Date endDate,
+	public Issue(String issueSubject, String issueType, Sprint sprint, Project proj, Date startDate, Date endDate,
 			String priority, String issueDescr, String status, byte isactive, Date dtCreated, Date dtUpdated,
-			String review, String comments, Employee createdBy, List<Employee> employees) {
+			String review, String comments, Employee createdBy/* , List<Employee> employees */) {
 		super();
 		this.issueSubject = issueSubject;
 		this.issueType = issueType;
 		this.sprint = sprint;
-		this.project = project;
+		this.proj = proj;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.priority = priority;
@@ -233,16 +232,16 @@ public class Issue {
 		this.review = review;
 		this.comments = comments;
 		this.createdBy = createdBy;
-		this.employees = employees;
+		// this.employees = employees;
 	}
 
 	@Override
 	public String toString() {
 		return "Issue [id=" + id + ", issueSubject=" + issueSubject + ", issueType=" + issueType + ", sprint=" + sprint
-				+ ", project=" + project + ", startDate=" + startDate + ", endDate=" + endDate + ", priority="
-				+ priority + ", issueDescr=" + issueDescr + ", status=" + status + ", isactive=" + isactive
-				+ ", dtCreated=" + dtCreated + ", dtUpdated=" + dtUpdated + ", review=" + review + ", comments="
-				+ comments + ", createdBy=" + createdBy + ", employees=" + employees + "]";
+				+ ", project=" + proj + ", startDate=" + startDate + ", endDate=" + endDate + ", priority=" + priority
+				+ ", issueDescr=" + issueDescr + ", status=" + status + ", isactive=" + isactive + ", dtCreated="
+				+ dtCreated + ", dtUpdated=" + dtUpdated + ", review=" + review + ", comments=" + comments
+				+ ", createdBy=" + createdBy + "]";
 	}
 
 }

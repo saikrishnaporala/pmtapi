@@ -35,6 +35,12 @@ public class DeptController {
 	private DepartmentService service;
 
 	// displaying list of all departments
+	@GetMapping("/accessToken")
+	public boolean getAcces() {
+		return true;
+	}
+
+	// displaying list of all departments
 	@GetMapping("/")
 	public List<Department> getAllDepts() {
 		return service.getAllDepartments();

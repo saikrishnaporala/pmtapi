@@ -9,17 +9,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * The persistent class for the users database table.
@@ -36,15 +31,22 @@ public class Employee {
 	private UUID id;
 
 	private int empid;
+	private String gender;
 	private String firstName;
 	private String lastName;
 	private String officialEmail;
 	private String personalEmail;
 	private Long mob;
-	private int roleType;
+	private String roleType;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	private Department dept;
+
 	private String designation;
-	private String joinDate;
-	private String endDate;
+	private Date joinDate;
+	private Date endDate;
+	private String username;
+	private String password;
 	private String skypeId;
 	private String twitterId;
 	private String linkedinId;
@@ -55,41 +57,31 @@ public class Employee {
 	private String aboutme;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "dt_created")
+	private Date actDate;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date billingEndDate;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date billingStartDate;
+
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date dtCreated;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "dt_updated")
 	private Date dtUpdated;
 
-	@ManyToOne
-	@JoinColumn(name = "company_id")
-	private Company company;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dtLastLogin;
 
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "team_id")
-	private Team team;
-
-	@OneToOne(mappedBy = "emp")
-	private User user;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dtLastLogout;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "dept_id")
-	private Department dept;
+	private Company company;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "createdBy", cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE,
-			CascadeType.REFRESH })
-	private List<Project> proj;
-
-	@ManyToMany(targetEntity = Project.class, cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE,
-			CascadeType.REFRESH })
+	@ManyToMany(targetEntity = Project.class, cascade = CascadeType.ALL)
 	private List<Project> projects;
-
-	@ManyToMany(targetEntity = Task.class, cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE,
-			CascadeType.REFRESH })
-	private List<Task> tasks;
 
 	public Employee() {
 	}
@@ -108,6 +100,14 @@ public class Employee {
 
 	public void setEmpid(int empid) {
 		this.empid = empid;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 	public String getFirstName() {
@@ -150,20 +150,20 @@ public class Employee {
 		this.mob = mob;
 	}
 
+	public String getRoleType() {
+		return roleType;
+	}
+
+	public void setRoleType(String roleType) {
+		this.roleType = roleType;
+	}
+
 	public Department getDept() {
 		return dept;
 	}
 
 	public void setDept(Department dept) {
 		this.dept = dept;
-	}
-
-	public int getRoleType() {
-		return roleType;
-	}
-
-	public void setRoleType(int roleType) {
-		this.roleType = roleType;
 	}
 
 	public String getDesignation() {
@@ -174,20 +174,36 @@ public class Employee {
 		this.designation = designation;
 	}
 
-	public String getJoinDate() {
+	public Date getJoinDate() {
 		return joinDate;
 	}
 
-	public void setJoinDate(String joinDate) {
+	public void setJoinDate(Date joinDate) {
 		this.joinDate = joinDate;
 	}
 
-	public String getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(String endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getSkypeId() {
@@ -254,6 +270,30 @@ public class Employee {
 		this.aboutme = aboutme;
 	}
 
+	public Date getActDate() {
+		return actDate;
+	}
+
+	public void setActDate(Date actDate) {
+		this.actDate = actDate;
+	}
+
+	public Date getBillingEndDate() {
+		return billingEndDate;
+	}
+
+	public void setBillingEndDate(Date billingEndDate) {
+		this.billingEndDate = billingEndDate;
+	}
+
+	public Date getBillingStartDate() {
+		return billingStartDate;
+	}
+
+	public void setBillingStartDate(Date billingStartDate) {
+		this.billingStartDate = billingStartDate;
+	}
+
 	public Date getDtCreated() {
 		return dtCreated;
 	}
@@ -270,36 +310,28 @@ public class Employee {
 		this.dtUpdated = dtUpdated;
 	}
 
+	public Date getDtLastLogin() {
+		return dtLastLogin;
+	}
+
+	public void setDtLastLogin(Date dtLastLogin) {
+		this.dtLastLogin = dtLastLogin;
+	}
+
+	public Date getDtLastLogout() {
+		return dtLastLogout;
+	}
+
+	public void setDtLastLogout(Date dtLastLogout) {
+		this.dtLastLogout = dtLastLogout;
+	}
+
 	public Company getCompany() {
 		return company;
 	}
 
 	public void setCompany(Company company) {
 		this.company = company;
-	}
-
-	public Team getTeam() {
-		return team;
-	}
-
-	public void setTeam(Team team1) {
-		team = team1;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public List<Project> getProj() {
-		return proj;
-	}
-
-	public void setProj(List<Project> proj) {
-		this.proj = proj;
 	}
 
 	public List<Project> getProjects() {
@@ -310,31 +342,27 @@ public class Employee {
 		this.projects = projects;
 	}
 
-	public List<Task> getTasks() {
-		return tasks;
-	}
-
-	public void setTasks(List<Task> tasks) {
-		this.tasks = tasks;
-	}
-
-	public Employee(UUID id, int empid, String firstName, String lastName, String officialEmail, String personalEmail,
-			Long mob, int roleType, String designation, String joinDate, String endDate, String skypeId,
-			String twitterId, String linkedinId, byte isactive, byte isAgree, byte isEmail, String photo,
-			String aboutme, Date dtCreated, Date dtUpdated, Company company, Team team, User user, Department dept,
-			List<Project> proj, List<Project> projects, List<Task> tasks) {
+	public Employee(int empid, String gender, String firstName, String lastName, String officialEmail,
+			String personalEmail, Long mob, String roleType, Department dept, String designation, Date joinDate,
+			Date endDate, String username, String password, String skypeId, String twitterId, String linkedinId,
+			byte isactive, byte isAgree, byte isEmail, String photo, String aboutme, Date actDate, Date billingEndDate,
+			Date billingStartDate, Date dtCreated, Date dtUpdated, Date dtLastLogin, Date dtLastLogout, Company company,
+			List<Project> projects) {
 		super();
-		this.id = id;
 		this.empid = empid;
+		this.gender = gender;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.officialEmail = officialEmail;
 		this.personalEmail = personalEmail;
 		this.mob = mob;
 		this.roleType = roleType;
+		this.dept = dept;
 		this.designation = designation;
 		this.joinDate = joinDate;
 		this.endDate = endDate;
+		this.username = username;
+		this.password = password;
 		this.skypeId = skypeId;
 		this.twitterId = twitterId;
 		this.linkedinId = linkedinId;
@@ -343,15 +371,15 @@ public class Employee {
 		this.isEmail = isEmail;
 		this.photo = photo;
 		this.aboutme = aboutme;
+		this.actDate = actDate;
+		this.billingEndDate = billingEndDate;
+		this.billingStartDate = billingStartDate;
 		this.dtCreated = dtCreated;
 		this.dtUpdated = dtUpdated;
+		this.dtLastLogin = dtLastLogin;
+		this.dtLastLogout = dtLastLogout;
 		this.company = company;
-		this.team = team;
-		this.user = user;
-		this.dept = dept;
-		this.proj = proj;
 		this.projects = projects;
-		this.tasks = tasks;
 	}
 
 }

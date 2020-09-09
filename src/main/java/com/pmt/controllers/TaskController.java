@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pmt.models.Task;
+import com.pmt.models.dto.Task_dto;
 import com.pmt.services.TaskService;
 
 @CrossOrigin("http://localhost:8080")
@@ -33,10 +35,20 @@ public class TaskController {
 	@Autowired
 	private TaskService service;
 
+	@GetMapping("/accessToken")
+	public boolean getAcces() {
+		return true;
+	}
+
 	// displaying list of all tasks
 	@GetMapping("/")
 	public List<Task> getAllTask() {
 		return service.getAllTasks();
+	}
+
+	@GetMapping("/pid/{id}")
+	public List<Task> getAllTasks(@PathVariable UUID id) {
+		return service.getAllTasksByPID(id);
 	}
 
 	// displaying task by id
@@ -48,14 +60,15 @@ public class TaskController {
 	// inserting task
 	@PostMapping("/create")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<UUID> addTasks(@RequestBody Task task) {
-		return new ResponseEntity<>(service.addTask(task), HttpStatus.CREATED);
+	public ResponseEntity<UUID> addTasks(@ModelAttribute Task_dto task) {
+		return new ResponseEntity<>(service.cuTask(task), HttpStatus.CREATED);
 	}
 
 	// updating task by id
 	@PutMapping("/{id}")
-	public void updateTask(@RequestBody Task e, @PathVariable UUID id) {
-		service.updateTask(e, id);
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<UUID> updateTask(@ModelAttribute Task_dto task) {
+		return new ResponseEntity<>(service.cuTask(task), HttpStatus.OK);
 	}
 
 	// deleting all tasks

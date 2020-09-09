@@ -18,9 +18,6 @@ public class DepartmentService {
 	@Autowired
 	private DeptRepo repo;
 
-	@Autowired
-	private CompanyService companyService;
-
 	// fetching all depts
 	public List<Department> getAllDepartments() {
 		List<Department> dept = (List<Department>) repo.findAll();

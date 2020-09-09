@@ -3,12 +3,15 @@ package com.pmt.services;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pmt.models.Employee;
 import com.pmt.models.Project;
+import com.pmt.models.dto.Project_dto;
+import com.pmt.repos.EmployeeRepo;
 import com.pmt.repos.ProjectRepo;
 
 @Service
@@ -18,7 +21,10 @@ public class ProjectService {
 	private ProjectRepo repo;
 
 	@Autowired
-	private EmployeeService service;
+	private EmployeeRepo erepo;
+
+	@Autowired
+	private EmployeeService empservice;
 
 	@Autowired
 	private CompanyService companyService;
@@ -37,26 +43,50 @@ public class ProjectService {
 		return repo.getOne(id);
 	}
 
-	// inserting project
-	public UUID addProject(Project c) {
-		c.setCompany(companyService.getComp(c.getCompany().getId()));
-		Employee e = service.getEmployee(c.getCreatedBy().getId());
-		c.setCreatedBy(e);
-		Date dtCreated = new Date();
-		c.setDtCreated(dtCreated);
-		repo.save(c);
-		String status = sprintService.defaultSprint(c, e, dtCreated);
-		System.out.println(status);
-		return c.getId();
+	// inserting/updating project
+	public UUID CUProject(Project_dto obj) {
+		Project proj = mappingDTO(obj);
+		if (obj.getId() == null) {
+			proj.setDtCreated(new Date());
+		} else {
+			proj.setDtUpdated(new Date());
+		}
+
+		/*
+		 * MultipartFile m = obj.getPhoto(); String s = m.getOriginalFilename(); proj =
+		 * repo.save(proj); if (m.getOriginalFilename() != null) { s =
+		 * proj.getCompany().getId() + "/employee/" + proj.getId().toString(); String
+		 * fileName = imgl.storeFile(m, s);
+		 * 
+		 * String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+		 * .path("/companyprofiles/" + s + "/").path(fileName).toUriString();
+		 * proj.setPhoto(fileDownloadUri); repo.save(proj); }
+		 */
+		proj = repo.save(proj);
+		return proj.getId();
 	}
 
-	// updating project by id
-	public void updateProject(Project project, UUID id) {
-		if (id == project.getId()) {
-			Date dtUpdated = new Date();
-			project.setDtUpdated(dtUpdated);
-			repo.save(project);
+	private Project mappingDTO(Project_dto obj) {
+		Project c1 = new Project();
+		if (obj.getId() != null) {
+			c1 = this.getProject(obj.getId());
 		}
+		c1.setProjName(obj.getProjName());
+		c1.setClient(obj.getClient());
+		c1.setStartDate(obj.getStartDate());
+		c1.setEndDate(obj.getEndDate());
+		c1.setPriority(obj.getPriority());
+		c1.setProjDescr(obj.getProjDescr());
+		c1.setSkills(obj.getSkills());
+		c1.setTools(obj.getTools());
+		c1.setStatus(obj.getStatus());
+		c1.setIsactive(obj.getIsactive());
+		c1.setCompany(companyService.getComp(obj.getCompany()));
+		c1.setCreatedBy(empservice.getEmployee(obj.getCreatedBy()));
+		obj.getEmployees().forEach(name -> System.out.println(name));
+		List<Employee> employees = obj.getEmployees().stream().map(u -> erepo.getOne(u)).collect(Collectors.toList());
+		c1.setEmployees(employees);
+		return c1;
 	}
 
 	// deleting all projects
@@ -74,5 +104,11 @@ public class ProjectService {
 		if (id == emp.getId()) {
 			repo.save(emp);
 		}
+	}
+
+	public List<Project> getAllProjectsByEmp(UUID empid) {
+		Employee e = empservice.getEmployee(empid);
+		List<Project> projs = (List<Project>) repo.findByCreatedBy(e);
+		return projs;
 	}
 }

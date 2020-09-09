@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,11 +22,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pmt.models.Issue;
+import com.pmt.models.dto.Issue_dto;
 import com.pmt.services.IssueService;
 
 @CrossOrigin("http://localhost:8080")
 @RestController
-@RequestMapping("/issues")
+@RequestMapping("/issue")
 public class IssueController {
 
 	static final Logger logger = LogManager.getLogger(IssueController.class.getName());
@@ -33,10 +35,20 @@ public class IssueController {
 	@Autowired
 	private IssueService service;
 
+	@GetMapping("/accessToken")
+	public boolean getAcces() {
+		return true;
+	}
+
 	// displaying list of all issues
 	@GetMapping("/")
 	public List<Issue> getAllIssue() {
 		return service.getAllIssues();
+	}
+
+	@GetMapping("/pid/{id}")
+	public List<Issue> getAllTasks(@PathVariable UUID id) {
+		return service.getAllIssuesByPID(id);
 	}
 
 	// displaying issue by id
@@ -48,14 +60,15 @@ public class IssueController {
 	// inserting issue
 	@PostMapping("/create")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<UUID> addIssues(@RequestBody Issue issue) {
-		return new ResponseEntity<>(service.addIssue(issue), HttpStatus.CREATED);
+	public ResponseEntity<UUID> addIssues(@ModelAttribute Issue_dto issue) {
+		return new ResponseEntity<>(service.cuIssue(issue), HttpStatus.CREATED);
 	}
 
 	// updating issue by id
 	@PutMapping("/{id}")
-	public void updateIssue(@RequestBody Issue e, @PathVariable UUID id) {
-		service.updateIssue(e, id);
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<UUID> updateIssue(@ModelAttribute Issue_dto issue) {
+		return new ResponseEntity<>(service.cuIssue(issue), HttpStatus.OK);
 	}
 
 	// deleting all issues

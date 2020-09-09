@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -18,6 +19,9 @@ public class EmployeeService {
 
 	@Autowired
 	private EmployeeRepo repo;
+
+	@Autowired
+	private PasswordEncoder bcryptEncoder;
 
 	@Autowired
 	private CompanyService companyService;
@@ -39,34 +43,27 @@ public class EmployeeService {
 		return repo.getOne(id);
 	}
 
-	// inserting employee
-	public UUID addEmployee(Employee_dto obj) {
+	// inserting/updating employee
+	public UUID CUEmployee(Employee_dto obj) {
+		Employee emptemp = mappingDTO(obj);
+		if (obj.getId() == null) {
+			emptemp.setDtCreated(new Date());
+		} else {
+			emptemp.setDtUpdated(new Date());
+		}
 		MultipartFile m = obj.getPhoto();
 		String s = m.getOriginalFilename();
-		Employee c1 = mappingDTO(obj, s);
-		c1.setDtCreated(new Date());
-		Employee res = repo.save(c1);
-		s = "employee/" + res.getId().toString();
-		String fileName = imgl.storeFile(m, s);
+		emptemp = repo.save(emptemp);
+		if (m.getOriginalFilename() != null) {
+			s = emptemp.getCompany().getId() + "/employee/" + emptemp.getId().toString();
+			String fileName = imgl.storeFile(m, s);
 
-		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-				.path("/companyprofiles/" + s + "/").path(fileName).toUriString();
-		res.setPhoto(fileDownloadUri);
-		repo.save(res);
-		// ImageUpload fu = new ImageUpload();
-		// result = fu.uploadFile(m, s);
-		// System.out.println(result);
-		return res.getId();
-	}
-
-	// updating employee by id
-	public void updateEmployee(Employee user, UUID id) {
-		System.out.println(user.getId());
-		System.out.println(id);
-		if (id.equals(user.getId())) {
-			user.setDtUpdated(new Date());
-			repo.save(user);
+			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+					.path("/companyprofiles/" + s + "/").path(fileName).toUriString();
+			emptemp.setPhoto(fileDownloadUri);
+			repo.save(emptemp);
 		}
+		return emptemp.getId();
 	}
 
 	// deleting all employees
@@ -86,18 +83,25 @@ public class EmployeeService {
 		}
 	}
 
-	private Employee mappingDTO(Employee_dto c, String result) {
+	private Employee mappingDTO(Employee_dto c) {
 		Employee c1 = new Employee();
+		if (c.getId() != null) {
+			c1 = this.getEmployee(c.getId());
+		}
 		c1.setEmpid(c.getEmpid());
+		c1.setGender(c.getGender());
 		c1.setFirstName(c.getFirstName());
 		c1.setLastName(c.getLastName());
 		c1.setOfficialEmail(c.getOfficialEmail());
 		c1.setPersonalEmail(c.getPersonalEmail());
 		c1.setMob(c.getMob());
 		c1.setRoleType(c.getRoleType());
+		c1.setDept(deptService.getDepartment(c.getDept()));
 		c1.setDesignation(c.getDesignation());
 		c1.setJoinDate(c.getJoinDate());
 		c1.setEndDate(c.getEndDate());
+		c1.setUsername(c.getUsername());
+		c1.setPassword(bcryptEncoder.encode(c.getPassword()));
 		c1.setSkypeId(c.getSkypeId());
 		c1.setTwitterId(c.getTwitterId());
 		c1.setLinkedinId(c.getLinkedinId());
@@ -105,23 +109,27 @@ public class EmployeeService {
 		c1.setIsAgree(c.getIsAgree());
 		c1.setIsEmail(c.getIsEmail());
 		c1.setAboutme(c.getAboutme());
-		c1.setDtCreated(c.getDtCreated());
-		c1.setDtUpdated(c.getDtUpdated());
-		c1.setCompany(c.getCompany());
-		c1.setUser(c.getUser());
-		c1.setDept(c.getDept());
-		c1.setProj(c.getProj());
-		c1.setProjects(c.getProjects());
-		c1.setTasks(c.getTasks());
+		c1.setActDate(c.getActDate());
+		c1.setBillingStartDate(c.getBillingStartDate());
+		c1.setBillingEndDate(c.getBillingEndDate());
+		c1.setDtLastLogin(c.getDtLastLogin());
+		c1.setDtLastLogout(c.getDtLastLogout());
+		c1.setCompany(companyService.getComp(c.getCompany()));
+
 		return c1;
 	}
 
-	public String getEmployee(int empid) {
-		Employee c = repo.findByEmpid(empid);
+	public String getEmployee(String username) {
+		Employee c = repo.findByUsername(username);
 		if (c != null) {
 			return "exist";
 		} else {
 			return "notexist";
 		}
+	}
+
+	public int getMaxEmployee() {
+		Integer e = repo.findMaxEmpId();
+		return e;
 	}
 }

@@ -1,7 +1,6 @@
 package com.pmt.models;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -10,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -64,13 +62,18 @@ public class Task {
 	private String revision;
 	private String comments;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "emp_id")
 	private Employee createdBy;
 
-	@ManyToMany(targetEntity = Employee.class, mappedBy = "tasks", cascade = { CascadeType.PERSIST, CascadeType.DETACH,
-			CascadeType.MERGE, CascadeType.REFRESH })
-	private List<Employee> employees;
+	@ManyToOne
+	@JoinColumn(name = "proj_id")
+	private Project proj;
+	/*
+	 * @ManyToMany(targetEntity = Employee.class, mappedBy = "tasks", cascade = {
+	 * CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE,
+	 * CascadeType.REFRESH }) private List<Employee> employees;
+	 */
 
 	public Task() {
 	}
@@ -203,26 +206,17 @@ public class Task {
 		this.createdBy = createdBy;
 	}
 
-	public List<Employee> getEmployees() {
-		return employees;
+	public Project getProj() {
+		return proj;
 	}
 
-	public void setEmployees(List<Employee> employees) {
-		this.employees = employees;
-	}
-
-	@Override
-	public String toString() {
-		return "Task [id=" + id + ", taskName=" + taskName + ", sprint=" + sprint + ", taskType=" + taskType
-				+ ", startDate=" + startDate + ", endDate=" + endDate + ", priority=" + priority + ", taskDescr="
-				+ taskDescr + ", status=" + status + ", isactive=" + isactive + ", dtCreated=" + dtCreated
-				+ ", dtUpdated=" + dtUpdated + ", review=" + review + ", revision=" + revision + ", comments="
-				+ comments + ", createdBy=" + createdBy + ", employees=" + employees + "]";
+	public void setProj(Project proj) {
+		this.proj = proj;
 	}
 
 	public Task(String taskName, Sprint sprint, String taskType, Date startDate, Date endDate, String priority,
 			String taskDescr, String status, byte isactive, Date dtCreated, Date dtUpdated, String review,
-			String revision, String comments, Employee createdBy, List<Employee> employees) {
+			String revision, String comments, Employee createdBy, Project proj) {
 		super();
 		this.taskName = taskName;
 		this.sprint = sprint;
@@ -239,7 +233,23 @@ public class Task {
 		this.revision = revision;
 		this.comments = comments;
 		this.createdBy = createdBy;
-		this.employees = employees;
+		this.proj = proj;
 	}
+
+	@Override
+	public String toString() {
+		return "Task [id=" + id + ", taskName=" + taskName + ", sprint=" + sprint + ", taskType=" + taskType
+				+ ", startDate=" + startDate + ", endDate=" + endDate + ", priority=" + priority + ", taskDescr="
+				+ taskDescr + ", status=" + status + ", isactive=" + isactive + ", dtCreated=" + dtCreated
+				+ ", dtUpdated=" + dtUpdated + ", review=" + review + ", revision=" + revision + ", comments="
+				+ comments + ", createdBy=" + createdBy + ", proj=" + proj + "]";
+	}
+
+	/*
+	 * public List<Employee> getEmployees() { return employees; }
+	 * 
+	 * public void setEmployees(List<Employee> employees) { this.employees =
+	 * employees; }
+	 */
 
 }

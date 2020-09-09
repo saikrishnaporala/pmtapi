@@ -8,24 +8,32 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.pmt.models.User;
-import com.pmt.repos.UserRepo;
+import com.pmt.models.Employee;
+import com.pmt.repos.EmployeeRepo;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 
 	@Autowired
-	private UserRepo userDao;
+	private EmployeeRepo empDao;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		User user = userDao.findByUsername(username);
-		if (user == null) {
+		Employee emp = empDao.findByUsername(username);
+		if (emp == null) {
 			throw new UsernameNotFoundException("User not found: " + username);
 		}
-		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+		return new org.springframework.security.core.userdetails.User(emp.getUsername(), emp.getPassword(),
 				new ArrayList<>());
 	}
 
+	public Employee loadUser(String username) throws UsernameNotFoundException {
+
+		Employee emp = empDao.findByUsername(username);
+		if (emp == null) {
+			throw new UsernameNotFoundException("User not found: " + username);
+		}
+		return emp;
+	}
 }

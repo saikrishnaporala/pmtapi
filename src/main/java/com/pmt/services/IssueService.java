@@ -1,6 +1,5 @@
 package com.pmt.services;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -8,9 +7,9 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pmt.models.Employee;
 import com.pmt.models.Issue;
 import com.pmt.models.Project;
+import com.pmt.models.dto.Issue_dto;
 import com.pmt.repos.IssuesRepo;
 
 @Service
@@ -40,23 +39,50 @@ public class IssueService {
 	}
 
 	// inserting issue
-	public UUID addIssue(Issue c) {
-		c.setCreatedBy(empservice.getEmployee(c.getCreatedBy().getId()));
-		if (c.getProject() != null) {
-			c.setProject(projservice.getProject(c.getProject().getId()));
+	public UUID cuIssue(Issue_dto obj) {
+		Issue issue = mappingDTO(obj);
+		if (obj.getId() == null) {
+			issue.setDtCreated(new Date());
+		} else {
+			issue.setDtUpdated(new Date());
 		}
-		if (c.getSprint() != null) {
-			c.setSprint(sprintService.getSprint(c.getSprint().getId()));
+
+		/*
+		 * MultipartFile m = obj.getPhoto(); String s = m.getOriginalFilename(); proj =
+		 * repo.save(proj); if (m.getOriginalFilename() != null) { s =
+		 * proj.getCompany().getId() + "/employee/" + proj.getId().toString(); String
+		 * fileName = imgl.storeFile(m, s);
+		 * 
+		 * String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+		 * .path("/companyprofiles/" + s + "/").path(fileName).toUriString();
+		 * proj.setPhoto(fileDownloadUri); repo.save(proj); }
+		 */
+		issue = repo.save(issue);
+		return issue.getId();
+		/*
+		 * List<Employee> l = new ArrayList<Employee>(); c.getEmployees().forEach(item
+		 * -> { l.add(empservice.getEmployee(item.getId())); }); c.setEmployees(l);
+		 */
+	}
+
+	private Issue mappingDTO(Issue_dto obj) {
+		Issue c1 = new Issue();
+		if (obj.getId() != null) {
+			c1 = this.getIssue(obj.getId());
 		}
-		List<Employee> l = new ArrayList<Employee>();
-		c.getEmployees().forEach(item -> {
-			l.add(empservice.getEmployee(item.getId()));
-		});
-		c.setEmployees(l);
-		Date dtCreated = new Date();
-		c.setDtCreated(dtCreated);
-		repo.save(c);
-		return c.getId();
+		c1.setIssueSubject(obj.getIssueSubject());
+		c1.setIssueType(obj.getIssueType());
+		c1.setProj(projservice.getProject(obj.getProj()));
+		c1.setStartDate(obj.getStartDate());
+		c1.setEndDate(obj.getEndDate());
+		c1.setPriority(obj.getPriority());
+		c1.setIssueDescr(obj.getIssueDescr());
+		c1.setStatus(obj.getStatus());
+		c1.setIsactive(obj.getIsactive());
+		c1.setReview(obj.getReview());
+		c1.setComments(obj.getComments());
+		c1.setCreatedBy(empservice.getEmployee(obj.getCreatedBy()));
+		return c1;
 	}
 
 	// updating issue by id
@@ -85,14 +111,12 @@ public class IssueService {
 		}
 	}
 
-	public void defaultIssues(Project p, Employee e, Date d) {
-
-		/*
-		 * Issue a1 = new Issue("Strategy", "Open", p, e, d, d); Issue a2 = new
-		 * Issue("Design", "Open", p, e, d, d); Issue a3 = new Issue("Development",
-		 * "Open", p, e, d, d); Issue a4 = new Issue("Testing", "Open", p, e, d, d);
-		 * Issue a5 = new Issue("Deliverables", "Open", p, e, d, d); repo.save(a1);
-		 * repo.save(a2); repo.save(a3); repo.save(a4); repo.save(a5);
-		 */
+	public List<Issue> getAllIssuesByPID(UUID id) {
+		System.out.println("pid: " + id);
+		Project proj = new Project();
+		proj.setId(id);
+		List<Issue> list = (List<Issue>) repo.findByProj(proj);
+		// list.sort(Comparator.comparing(Sprint_dto::getSeq));
+		return list;
 	}
 }

@@ -1,6 +1,5 @@
 package com.pmt.services;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -8,9 +7,9 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pmt.models.Employee;
 import com.pmt.models.Project;
 import com.pmt.models.Task;
+import com.pmt.models.dto.Task_dto;
 import com.pmt.repos.TaskRepo;
 
 @Service
@@ -21,6 +20,9 @@ public class TaskService {
 
 	@Autowired
 	private EmployeeService empservice;
+
+	@Autowired
+	private ProjectService projservice;
 
 	@Autowired
 	private SprintService sprintService;
@@ -37,18 +39,51 @@ public class TaskService {
 	}
 
 	// inserting task
-	public UUID addTask(Task c) {
-		c.setCreatedBy(empservice.getEmployee(c.getCreatedBy().getId()));
-		List<Employee> l = new ArrayList<Employee>();
-		c.getEmployees().forEach(item -> {
-			l.add(empservice.getEmployee(item.getId()));
-		});
-		c.setEmployees(l);
-		c.setSprint(sprintService.getSprint(c.getSprint().getId()));
-		Date dtCreated = new Date();
-		c.setDtCreated(dtCreated);
-		repo.save(c);
-		return c.getId();
+	public UUID cuTask(Task_dto obj) {
+		Task task = mappingDTO(obj);
+		if (obj.getId() == null) {
+			task.setDtCreated(new Date());
+		} else {
+			task.setDtUpdated(new Date());
+		}
+
+		/*
+		 * MultipartFile m = obj.getPhoto(); String s = m.getOriginalFilename(); proj =
+		 * repo.save(proj); if (m.getOriginalFilename() != null) { s =
+		 * proj.getCompany().getId() + "/employee/" + proj.getId().toString(); String
+		 * fileName = imgl.storeFile(m, s);
+		 * 
+		 * String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+		 * .path("/companyprofiles/" + s + "/").path(fileName).toUriString();
+		 * proj.setPhoto(fileDownloadUri); repo.save(proj); }
+		 */
+		task = repo.save(task);
+		return task.getId();
+		/*
+		 * List<Employee> l = new ArrayList<Employee>(); c.getEmployees().forEach(item
+		 * -> { l.add(empservice.getEmployee(item.getId())); }); c.setEmployees(l);
+		 */
+	}
+
+	private Task mappingDTO(Task_dto obj) {
+		Task c1 = new Task();
+		if (obj.getId() != null) {
+			c1 = this.getTask(obj.getId());
+		}
+		c1.setTaskName(obj.getTaskName());
+		c1.setTaskType(obj.getTaskType());
+		c1.setStartDate(obj.getStartDate());
+		c1.setEndDate(obj.getEndDate());
+		c1.setPriority(obj.getPriority());
+		c1.setTaskDescr(obj.getTaskDescr());
+		c1.setStatus(obj.getStatus());
+		c1.setIsactive(obj.getIsactive());
+		c1.setReview(obj.getReview());
+		c1.setRevision(obj.getRevision());
+		c1.setComments(obj.getComments());
+		c1.setCreatedBy(empservice.getEmployee(obj.getCreatedBy()));
+		c1.setProj(projservice.getProject(obj.getProj()));
+		return c1;
 	}
 
 	// updating task by id
@@ -77,14 +112,12 @@ public class TaskService {
 		}
 	}
 
-	public void defaultTask(Project p, Employee e, Date d) {
-
-		/*
-		 * Task a1 = new Task("Strategy", "Open", p, e, d, d); Task a2 = new
-		 * Task("Design", "Open", p, e, d, d); Task a3 = new Task("Development", "Open",
-		 * p, e, d, d); Task a4 = new Task("Testing", "Open", p, e, d, d); Task a5 = new
-		 * Task("Deliverables", "Open", p, e, d, d); repo.save(a1); repo.save(a2);
-		 * repo.save(a3); repo.save(a4); repo.save(a5);
-		 */
+	public List<Task> getAllTasksByPID(UUID id) {
+		System.out.println("pid: " + id);
+		Project proj = new Project();
+		proj.setId(id);
+		List<Task> list = (List<Task>) repo.findByProj(proj);
+		// list.sort(Comparator.comparing(Sprint_dto::getSeq));
+		return list;
 	}
 }

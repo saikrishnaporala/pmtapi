@@ -4,23 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * The persistent class for the users database table.
@@ -28,24 +13,28 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @param <Team>
  * 
  */
-@Entity
-public class Employee_dto {
-	@Id
-	@GeneratedValue(generator = "uuid2")
-	@GenericGenerator(name = "uuid2", strategy = "uuid2")
-	@Column(name = "id", columnDefinition = "BINARY(16)")
-	private UUID id;
 
+public class Employee_dto {
+	private UUID id;
 	private int empid;
+	private String gender;
 	private String firstName;
 	private String lastName;
 	private String officialEmail;
 	private String personalEmail;
 	private Long mob;
-	private int roleType;
+	private String roleType;
+	private UUID dept;
 	private String designation;
-	private String joinDate;
-	private String endDate;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date joinDate;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date endDate;
+
+	private String username;
+	private String password;
 	private String skypeId;
 	private String twitterId;
 	private String linkedinId;
@@ -55,42 +44,20 @@ public class Employee_dto {
 	private MultipartFile photo;
 	private String aboutme;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "dt_created")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date actDate;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date billingEndDate;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date billingStartDate;
 	private Date dtCreated;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "dt_updated")
 	private Date dtUpdated;
-
-	@ManyToOne
-	@JoinColumn(name = "company_id")
-	private Company company;
-
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "team_id")
-	private Team team;
-
-	@OneToOne(mappedBy = "emp")
-	private User user;
-
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "dept_id")
-	private Department dept;
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "createdBy", cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE,
-			CascadeType.REFRESH })
-	private List<Project> proj;
-
-	@ManyToMany(targetEntity = Project.class, cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE,
-			CascadeType.REFRESH })
-	private List<Project> projects;
-
-	@ManyToMany(targetEntity = Task.class, cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE,
-			CascadeType.REFRESH })
-	private List<Task> tasks;
+	private Date dtLastLogin;
+	private Date dtLastLogout;
+	private UUID company;
+	private List<UUID> projects;
 
 	public Employee_dto() {
 	}
@@ -109,6 +76,14 @@ public class Employee_dto {
 
 	public void setEmpid(int empid) {
 		this.empid = empid;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 	public String getFirstName() {
@@ -151,20 +126,20 @@ public class Employee_dto {
 		this.mob = mob;
 	}
 
-	public Department getDept() {
-		return dept;
-	}
-
-	public void setDept(Department dept) {
-		this.dept = dept;
-	}
-
-	public int getRoleType() {
+	public String getRoleType() {
 		return roleType;
 	}
 
-	public void setRoleType(int roleType) {
+	public void setRoleType(String roleType) {
 		this.roleType = roleType;
+	}
+
+	public UUID getDept() {
+		return dept;
+	}
+
+	public void setDept(UUID dept) {
+		this.dept = dept;
 	}
 
 	public String getDesignation() {
@@ -175,20 +150,36 @@ public class Employee_dto {
 		this.designation = designation;
 	}
 
-	public String getJoinDate() {
+	public Date getJoinDate() {
 		return joinDate;
 	}
 
-	public void setJoinDate(String joinDate) {
+	public void setJoinDate(Date joinDate) {
 		this.joinDate = joinDate;
 	}
 
-	public String getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(String endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getSkypeId() {
@@ -255,6 +246,30 @@ public class Employee_dto {
 		this.aboutme = aboutme;
 	}
 
+	public Date getActDate() {
+		return actDate;
+	}
+
+	public void setActDate(Date actDate) {
+		this.actDate = actDate;
+	}
+
+	public Date getBillingEndDate() {
+		return billingEndDate;
+	}
+
+	public void setBillingEndDate(Date billingEndDate) {
+		this.billingEndDate = billingEndDate;
+	}
+
+	public Date getBillingStartDate() {
+		return billingStartDate;
+	}
+
+	public void setBillingStartDate(Date billingStartDate) {
+		this.billingStartDate = billingStartDate;
+	}
+
 	public Date getDtCreated() {
 		return dtCreated;
 	}
@@ -271,52 +286,36 @@ public class Employee_dto {
 		this.dtUpdated = dtUpdated;
 	}
 
-	public Company getCompany() {
+	public Date getDtLastLogin() {
+		return dtLastLogin;
+	}
+
+	public void setDtLastLogin(Date dtLastLogin) {
+		this.dtLastLogin = dtLastLogin;
+	}
+
+	public Date getDtLastLogout() {
+		return dtLastLogout;
+	}
+
+	public void setDtLastLogout(Date dtLastLogout) {
+		this.dtLastLogout = dtLastLogout;
+	}
+
+	public UUID getCompany() {
 		return company;
 	}
 
-	public void setCompany(Company company) {
+	public void setCompany(UUID company) {
 		this.company = company;
 	}
 
-	public Team getTeam() {
-		return team;
-	}
-
-	public void setTeam(Team team1) {
-		team = team1;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public List<Project> getProj() {
-		return proj;
-	}
-
-	public void setProj(List<Project> proj) {
-		this.proj = proj;
-	}
-
-	public List<Project> getProjects() {
+	public List<UUID> getProjects() {
 		return projects;
 	}
 
-	public void setProjects(List<Project> projects) {
+	public void setProjects(List<UUID> projects) {
 		this.projects = projects;
-	}
-
-	public List<Task> getTasks() {
-		return tasks;
-	}
-
-	public void setTasks(List<Task> tasks) {
-		this.tasks = tasks;
 	}
 
 }

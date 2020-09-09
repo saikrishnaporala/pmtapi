@@ -109,9 +109,6 @@ public class CompanyService {
 		c1.setIsActive(c.getIsActive());
 		c1.setCreated(c.getCreated());
 		c1.setModified(c.getModified());
-		c1.setTeams(c.getTeams());
-		c1.setDept(c.getDept());
-		c1.setEmployee(c.getEmployee());
 		return c1;
 	}
 

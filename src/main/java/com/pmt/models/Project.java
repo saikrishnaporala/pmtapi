@@ -12,20 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-/**
- * The persistent class for the users database table.
- * 
- * @param <Team>
- * 
- */
 @Entity
 public class Project {
 	@Id
@@ -38,11 +29,9 @@ public class Project {
 	private String client; // object
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "start_date")
 	private Date startDate;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "end_date")
 	private Date endDate;
 
 	private int rate;
@@ -55,31 +44,28 @@ public class Project {
 	private byte isactive;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "dt_created")
 	private Date dtCreated;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "dt_updated")
 	private Date dtUpdated;
 
 	@ManyToOne
 	@JoinColumn(name = "company_id")
 	private Company company;
 
-	@ManyToOne
-	@JoinColumn(name = "emp_id")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "empid")
 	private Employee createdBy;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "proj", cascade = CascadeType.ALL)
-	private List<Sprint> activity;
+//	@JsonIgnore
+//	@OneToMany(mappedBy = "proj", cascade = CascadeType.ALL)
+//	private List<Sprint_dto> activity;
+//
+//	@JsonIgnore
+//	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+//	private List<Issue> issues;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-	private List<Issue> issues;
-
-	@ManyToMany(targetEntity = Employee.class, mappedBy = "projects", cascade = { CascadeType.PERSIST,
-			CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH })
+	@ManyToMany(targetEntity = Employee.class, mappedBy = "projects", cascade = CascadeType.ALL)
 	private List<Employee> employees;
 
 	public Project() {
@@ -219,6 +205,37 @@ public class Project {
 
 	public void setCreatedBy(Employee createdBy) {
 		this.createdBy = createdBy;
+	}
+
+	public List<Employee> getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
+	}
+
+	public Project(String projName, String client, Date startDate, Date endDate, int rate, String ratebasedOn,
+			String priority, String projDescr, String skills, String tools, String status, byte isactive,
+			Date dtCreated, Date dtUpdated, Company company, Employee createdBy, List<Employee> employees) {
+		super();
+		this.projName = projName;
+		this.client = client;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.rate = rate;
+		this.ratebasedOn = ratebasedOn;
+		this.priority = priority;
+		this.projDescr = projDescr;
+		this.skills = skills;
+		this.tools = tools;
+		this.status = status;
+		this.isactive = isactive;
+		this.dtCreated = dtCreated;
+		this.dtUpdated = dtUpdated;
+		this.company = company;
+		this.createdBy = createdBy;
+		this.employees = employees;
 	}
 
 }

@@ -8,8 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,10 +28,6 @@ public class Department {
 	private String deptName;
 	private String deptHead;
 	private int empCount;
-
-	@ManyToOne
-	@JoinColumn(name = "company_id")
-	private Company company;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dt_created")
@@ -82,14 +76,6 @@ public class Department {
 		this.empCount = empCount;
 	}
 
-	public Company getCompany() {
-		return company;
-	}
-
-	public void setCompany(Company company) {
-		this.company = company;
-	}
-
 	public Date getDtCreated() {
 		return dtCreated;
 	}
@@ -117,17 +103,15 @@ public class Department {
 	@Override
 	public String toString() {
 		return "Department [id=" + id + ", deptName=" + deptName + ", deptHead=" + deptHead + ", empCount=" + empCount
-				+ ", company=" + company + ", dtCreated=" + dtCreated + ", dtUpdated=" + dtUpdated + "]";
+				+ ", dtCreated=" + dtCreated + ", dtUpdated=" + dtUpdated + "]";
 	}
 
-	public Department(UUID id, String deptName, String deptHead, int empCount, Company company, Date dtCreated,
-			Date dtUpdated) {
+	public Department(UUID id, String deptName, String deptHead, int empCount, Date dtCreated, Date dtUpdated) {
 		super();
 		this.id = id;
 		this.deptName = deptName;
 		this.deptHead = deptHead;
 		this.empCount = empCount;
-		this.company = company;
 		this.dtCreated = dtCreated;
 		this.dtUpdated = dtUpdated;
 	}

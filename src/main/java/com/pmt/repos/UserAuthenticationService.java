@@ -2,7 +2,7 @@ package com.pmt.repos;
 
 import java.util.Optional;
 
-import com.pmt.models.User;
+import com.pmt.models.Employee;
 
 public interface UserAuthenticationService {
 
@@ -21,12 +21,12 @@ public interface UserAuthenticationService {
 	 * @param token user dao key
 	 * @return
 	 */
-	Optional<User> findByToken(String token);
+	Optional<Employee> findByToken(String token);
 
 	/**
 	 * Logs out the given input {@code user}.
 	 *
 	 * @param user the user to logout
 	 */
-	void logout(User user);
+	void logout(Employee emp);
 }

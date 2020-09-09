@@ -36,9 +36,7 @@ public class Company_dto {
 	private byte isActive;
 	private Date created;
 	private Date modified;
-	private Set<Team> teams;
 	private Set<Department> dept;
-	private Set<Employee> employee;
 
 	public Company_dto() {
 	}
@@ -231,14 +229,6 @@ public class Company_dto {
 		this.modified = modified;
 	}
 
-	public Set<Team> getTeams() {
-		return teams;
-	}
-
-	public void setTeams(Set<Team> teams) {
-		this.teams = teams;
-	}
-
 	public Set<Department> getDept() {
 		return dept;
 	}
@@ -247,19 +237,10 @@ public class Company_dto {
 		this.dept = dept;
 	}
 
-	public Set<Employee> getEmployee() {
-		return employee;
-	}
-
-	public void setEmployee(Set<Employee> employee) {
-		this.employee = employee;
-	}
-
 	public Company_dto(UUID id, String companyName, String contactPerson, MultipartFile logo, String address1,
 			String address2, String city, String state, String country, String zip, String phone, String fax,
 			String email, String website, String legalStatus, String estdYear, String empcount, String accessempcount,
-			String businessType, String aboutme, byte isActive, Date created, Date modified, Set<Team> teams,
-			Set<Department> dept, Set<Employee> employee) {
+			String businessType, String aboutme, byte isActive, Date created, Date modified, Set<Department> dept) {
 		super();
 		this.id = id;
 		this.companyName = companyName;
@@ -284,9 +265,7 @@ public class Company_dto {
 		this.isActive = isActive;
 		this.created = created;
 		this.modified = modified;
-		this.teams = teams;
 		this.dept = dept;
-		this.employee = employee;
 	}
 
 	@Override
@@ -296,8 +275,8 @@ public class Company_dto {
 				+ ", country=" + country + ", zip=" + zip + ", phone=" + phone + ", fax=" + fax + ", email=" + email
 				+ ", website=" + website + ", legalStatus=" + legalStatus + ", estdYear=" + estdYear + ", empcount="
 				+ empcount + ", accessempcount=" + accessempcount + ", businessType=" + businessType + ", aboutme="
-				+ aboutme + ", isActive=" + isActive + ", created=" + created + ", modified=" + modified + ", teams="
-				+ teams + ", dept=" + dept + ", employee=" + employee + "]";
+				+ aboutme + ", isActive=" + isActive + ", created=" + created + ", modified=" + modified + ", dept="
+				+ dept + "]";
 	}
 
 }

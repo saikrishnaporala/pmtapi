@@ -1,6 +1,5 @@
 package com.pmt.services;
 
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -8,9 +7,9 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pmt.models.Employee;
 import com.pmt.models.Project;
 import com.pmt.models.Sprint;
+import com.pmt.models.dto.Sprint_dto;
 import com.pmt.repos.SprintRepo;
 
 @Service
@@ -37,22 +36,42 @@ public class SprintService {
 	}
 
 	// inserting sprint
-	public UUID addSprint(Sprint c) {
-		c.setSprintcreatedBy(empservice.getEmployee(c.getSprintcreatedBy().getId()));
-		c.setProj(projectService.getProject(c.getProj().getId()));
-		Date dtCreated = new Date();
-		c.setDtCreated(dtCreated);
-		repo.save(c);
-		return c.getId();
+	public UUID CUSprint(Sprint_dto obj) {
+		Sprint sprint = mappingDTO(obj);
+		if (obj.getSprintid() == null) {
+			sprint.setSprintDtCreated(new Date());
+		} else {
+			sprint.setSprintDtUpdated(new Date());
+		}
+
+		/*
+		 * MultipartFile m = obj.getPhoto(); String s = m.getOriginalFilename(); proj =
+		 * repo.save(proj); if (m.getOriginalFilename() != null) { s =
+		 * proj.getCompany().getId() + "/employee/" + proj.getId().toString(); String
+		 * fileName = imgl.storeFile(m, s);
+		 * 
+		 * String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+		 * .path("/companyprofiles/" + s + "/").path(fileName).toUriString();
+		 * proj.setPhoto(fileDownloadUri); repo.save(proj); }
+		 */
+		sprint = repo.save(sprint);
+		return sprint.getSprintid();
 	}
 
-	// updating sprint by id
-	public void updateSprint(Sprint sprint, UUID id) {
-		if (id == sprint.getId()) {
-			Date dtUpdated = new Date();
-			sprint.setDtUpdated(dtUpdated);
-			repo.save(sprint);
+	private Sprint mappingDTO(Sprint_dto obj) {
+		Sprint c1 = new Sprint();
+		if (obj.getSprintid() != null) {
+			c1 = this.getSprint(obj.getSprintid());
 		}
+		c1.setSprintName(obj.getSprintName());
+		c1.setSprintStartDate(obj.getSprintStartDate());
+		c1.setSprintEndDate(obj.getSprintEndDate());
+		c1.setSprintStatus(obj.getSprintStatus());
+		c1.setSprintIsactive(obj.getSprintIsactive());
+		c1.setSprintProj(projectService.getProject(obj.getSprintProj()));
+		c1.setSprintCreatedBy(empservice.getEmployee(obj.getSprintCreatedBy()));
+		c1.setSprintDescr(obj.getSprintDescr());
+		return c1;
 	}
 
 	// deleting all sprints
@@ -66,25 +85,10 @@ public class SprintService {
 	}
 
 	// patching/updating sprint by id
-	public void patchSprint(Sprint emp, UUID id) {
-		if (id == emp.getId()) {
-			repo.save(emp);
+	public void patchSprint(Sprint obj, UUID id) {
+		if (id == obj.getSprintid()) {
+			repo.save(obj);
 		}
-	}
-
-	public String defaultSprint(Project p, Employee e, Date d) {
-
-		Sprint a1 = new Sprint("Strategy", "Open", 1, p, e, d, d);
-		Sprint a2 = new Sprint("Design", "Open", 2, p, e, d, d);
-		Sprint a3 = new Sprint("Development", "Open", 3, p, e, d, d);
-		Sprint a4 = new Sprint("Testing", "Open", 4, p, e, d, d);
-		Sprint a5 = new Sprint("Deliverables", "Open", 5, p, e, d, d);
-		repo.save(a1);
-		repo.save(a2);
-		repo.save(a3);
-		repo.save(a4);
-		repo.save(a5);
-		return "SUCCESS";
 	}
 
 	public List<Sprint> getAllSprintsByPID(UUID id) {
@@ -92,7 +96,7 @@ public class SprintService {
 		Project proj = new Project();
 		proj.setId(id);
 		List<Sprint> list = (List<Sprint>) repo.findByProj(proj);
-		list.sort(Comparator.comparing(Sprint::getSeq));
+		// list.sort(Comparator.comparing(Sprint_dto::getSeq));
 		return list;
 	}
 }

@@ -1,10 +1,9 @@
 package com.pmt.models;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -64,16 +63,8 @@ public class Company {
 	private Date modified;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-	private Set<Team> teams;
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-	private Set<Department> dept;
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-	private Set<Employee> employee;
+	@OneToMany(mappedBy = "dept")
+	private List<Employee> emp;
 
 	public Company() {
 	}
@@ -266,37 +257,19 @@ public class Company {
 		this.modified = modified;
 	}
 
-	public Set<Team> getTeams() {
-		return teams;
+	public List<Employee> getEmp() {
+		return emp;
 	}
 
-	public void setTeams(Set<Team> teams) {
-		this.teams = teams;
+	public void setEmp(List<Employee> emp) {
+		this.emp = emp;
 	}
 
-	public Set<Department> getDept() {
-		return dept;
-	}
-
-	public void setDept(Set<Department> dept) {
-		this.dept = dept;
-	}
-
-	public Set<Employee> getEmployee() {
-		return employee;
-	}
-
-	public void setEmployee(Set<Employee> employee) {
-		this.employee = employee;
-	}
-
-	public Company(UUID id, String companyName, String contactPerson, String logo, String address1, String address2,
-			String city, String state, String country, String zip, String phone, String fax, String email,
-			String website, String legalStatus, String estdYear, String empcount, String accessempcount,
-			String businessType, String aboutme, byte isActive, Date created, Date modified, Set<Team> teams,
-			Set<Department> dept, Set<Employee> employee) {
+	public Company(String companyName, String contactPerson, String logo, String address1, String address2, String city,
+			String state, String country, String zip, String phone, String fax, String email, String website,
+			String legalStatus, String estdYear, String empcount, String accessempcount, String businessType,
+			String aboutme, byte isActive, Date created, Date modified, List<Employee> emp) {
 		super();
-		this.id = id;
 		this.companyName = companyName;
 		this.contactPerson = contactPerson;
 		this.logo = logo;
@@ -319,9 +292,7 @@ public class Company {
 		this.isActive = isActive;
 		this.created = created;
 		this.modified = modified;
-		this.teams = teams;
-		this.dept = dept;
-		this.employee = employee;
+		this.emp = emp;
 	}
 
 	@Override
@@ -331,8 +302,8 @@ public class Company {
 				+ ", country=" + country + ", zip=" + zip + ", phone=" + phone + ", fax=" + fax + ", email=" + email
 				+ ", website=" + website + ", legalStatus=" + legalStatus + ", estdYear=" + estdYear + ", empcount="
 				+ empcount + ", accessempcount=" + accessempcount + ", businessType=" + businessType + ", aboutme="
-				+ aboutme + ", isActive=" + isActive + ", created=" + created + ", modified=" + modified + ", teams="
-				+ teams + ", dept=" + dept + ", employee=" + employee + "]";
+				+ aboutme + ", isActive=" + isActive + ", created=" + created + ", modified=" + modified + ", emp="
+				+ emp + "]";
 	}
 
 }

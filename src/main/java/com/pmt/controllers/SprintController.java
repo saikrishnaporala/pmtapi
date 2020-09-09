@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pmt.models.Sprint;
+import com.pmt.models.dto.Sprint_dto;
 import com.pmt.services.SprintService;
 
 @CrossOrigin("http://localhost:8080")
@@ -53,14 +55,15 @@ public class SprintController {
 	// inserting sprint
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<UUID> addSprints(@RequestBody Sprint sprint) {
-		return new ResponseEntity<>(service.addSprint(sprint), HttpStatus.CREATED);
+	public ResponseEntity<UUID> CUSprints(@ModelAttribute Sprint_dto sprint_dto) {
+		return new ResponseEntity<>(service.CUSprint(sprint_dto), HttpStatus.CREATED);
 	}
 
 	// updating sprint by id
 	@PutMapping("/{id}")
-	public void updateSprint(@RequestBody Sprint e, @PathVariable UUID id) {
-		service.updateSprint(e, id);
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<UUID> updateSprint(@RequestBody Sprint_dto sprint_dto, @PathVariable UUID id) {
+		return new ResponseEntity<>(service.CUSprint(sprint_dto), HttpStatus.CREATED);
 	}
 
 	// deleting all sprints
