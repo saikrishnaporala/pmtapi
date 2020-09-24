@@ -2,6 +2,7 @@ package com.pmt.services;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class ProjectService {
 	@Autowired
 	private ProjectRepo repo;
 
-	@Autowired
+	@Autowired(required = true)
 	private EmployeeRepo erepo;
 
 	@Autowired
@@ -28,9 +29,6 @@ public class ProjectService {
 
 	@Autowired
 	private CompanyService companyService;
-
-	@Autowired
-	private SprintService sprintService;
 
 	// fetching all projects
 	public List<Project> getAllProjects() {
@@ -63,6 +61,16 @@ public class ProjectService {
 		 * proj.setPhoto(fileDownloadUri); repo.save(proj); }
 		 */
 		proj = repo.save(proj);
+		for (UUID emp : obj.getEmployees()) {
+			Employee e = empservice.getEmployee(emp);
+			Set<Project> s = e.getProjects();
+			s.add(proj);
+			erepo.save(e);
+		}
+		Employee e = empservice.getEmployee(obj.getProjCreatedBy());
+		Set<Project> s = e.getProjCreatedBy();
+		s.add(proj);
+		erepo.save(e);
 		return proj.getId();
 	}
 
@@ -73,18 +81,17 @@ public class ProjectService {
 		}
 		c1.setProjName(obj.getProjName());
 		c1.setClient(obj.getClient());
-		c1.setStartDate(obj.getStartDate());
-		c1.setEndDate(obj.getEndDate());
-		c1.setPriority(obj.getPriority());
+		c1.setProjStartDate(obj.getProjStartDate());
+		c1.setProjEndDate(obj.getProjEndDate());
+		c1.setProjPriority(obj.getProjPriority());
 		c1.setProjDescr(obj.getProjDescr());
-		c1.setSkills(obj.getSkills());
-		c1.setTools(obj.getTools());
-		c1.setStatus(obj.getStatus());
-		c1.setIsactive(obj.getIsactive());
+		c1.setProjSkills(obj.getProjSkills());
+		c1.setProjTools(obj.getProjTools());
+		c1.setProjStatus(obj.getProjStatus());
+		c1.setProjIsactive(obj.getProjIsactive());
 		c1.setCompany(companyService.getComp(obj.getCompany()));
-		c1.setCreatedBy(empservice.getEmployee(obj.getCreatedBy()));
-		obj.getEmployees().forEach(name -> System.out.println(name));
-		List<Employee> employees = obj.getEmployees().stream().map(u -> erepo.getOne(u)).collect(Collectors.toList());
+		c1.setProjCreatedBy(empservice.getEmployee(obj.getProjCreatedBy()));
+		Set<Employee> employees = obj.getEmployees().stream().map(u -> erepo.getOne(u)).collect(Collectors.toSet());
 		c1.setEmployees(employees);
 		return c1;
 	}
@@ -96,6 +103,19 @@ public class ProjectService {
 
 	// deleting project by id
 	public void deleteProjectByID(UUID id) {
+		Project p = repo.getOne(id);
+		for (Employee emp : p.getEmployees()) {
+			Employee e = erepo.getOne(emp.getId());
+			System.out.println("employee : " + e.getId());
+			Set<Project> s = e.getProjects();
+			s.remove(p);
+			e.setProjects(s);
+			erepo.save(e);
+		}
+		Employee e = p.getProjCreatedBy();
+		Set<Project> s = e.getProjCreatedBy();
+		s.remove(p);
+		erepo.save(e);
 		repo.deleteById(id);
 	}
 
@@ -108,7 +128,7 @@ public class ProjectService {
 
 	public List<Project> getAllProjectsByEmp(UUID empid) {
 		Employee e = empservice.getEmployee(empid);
-		List<Project> projs = (List<Project>) repo.findByCreatedBy(e);
+		List<Project> projs = (List<Project>) repo.findByProjCreatedBy(e);
 		return projs;
 	}
 }

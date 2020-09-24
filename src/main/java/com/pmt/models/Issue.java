@@ -1,14 +1,17 @@
 package com.pmt.models;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,64 +29,56 @@ public class Issue {
 	@Id
 	@GeneratedValue(generator = "uuid2")
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
-	@Column(name = "id", columnDefinition = "BINARY(16)")
-	private UUID id;
+	@Column(name = "issueid", columnDefinition = "BINARY(16)")
+	private UUID issueid;
 
 	private String issueSubject;
 
-	private String issueType;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+	@JoinColumn(name = "task_id")
+	private Task issueTask; // object
 
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
 	@JoinColumn(name = "sprint_id")
-	private Sprint sprint; // object
+	private Sprint issueSprint; // object
 
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
 	@JoinColumn(name = "proj_id")
-	private Project proj; // object
+	private Project issueProj; // object
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "start_date")
-	private Date startDate;
+	private Date issueStartDate;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "end_date")
-	private Date endDate;
+	private Date issueEndDate;
 
-	private String priority;
+	private String issuePriority;
 	private String issueDescr;
-	private String status;
-	private byte isactive;
+	private String issueStatus;
+	private String issueIsactive;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "dt_created")
 	private Date dtCreated;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "dt_updated")
 	private Date dtUpdated;
 
-	private String review;
-	private String comments;
+	private String issueReview;
+	private String issueComments;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "emp_id")
-	private Employee createdBy;
+	private Employee issueCreatedBy;
 
-	/*
-	 * @ManyToMany(targetEntity = Employee.class, mappedBy = "tasks", cascade = {
-	 * CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE,
-	 * CascadeType.REFRESH }) private List<Employee> employees;
-	 */
+	@ManyToMany(mappedBy = "issues", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+	private Set<Employee> issueEmployees;
 
-	public Issue() {
+	public UUID getIssueid() {
+		return issueid;
 	}
 
-	public UUID getId() {
-		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
+	public void setIssueid(UUID issueid) {
+		this.issueid = issueid;
 	}
 
 	public String getIssueSubject() {
@@ -94,52 +89,52 @@ public class Issue {
 		this.issueSubject = issueSubject;
 	}
 
-	public String getIssueType() {
-		return issueType;
+	public Task getIssueTask() {
+		return issueTask;
 	}
 
-	public void setIssueType(String issueType) {
-		this.issueType = issueType;
+	public void setIssueTask(Task task) {
+		this.issueTask = task;
 	}
 
-	public Sprint getSprint() {
-		return sprint;
+	public Sprint getIssueSprint() {
+		return issueSprint;
 	}
 
-	public void setSprint(Sprint sprint) {
-		this.sprint = sprint;
+	public void setIssueSprint(Sprint issueSprint) {
+		this.issueSprint = issueSprint;
 	}
 
-	public Project getProj() {
-		return proj;
+	public Project getIssueProj() {
+		return issueProj;
 	}
 
-	public void setProj(Project proj) {
-		this.proj = proj;
+	public void setIssueProj(Project issueProj) {
+		this.issueProj = issueProj;
 	}
 
-	public Date getStartDate() {
-		return startDate;
+	public Date getIssueStartDate() {
+		return issueStartDate;
 	}
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+	public void setIssueStartDate(Date issueStartDate) {
+		this.issueStartDate = issueStartDate;
 	}
 
-	public Date getEndDate() {
-		return endDate;
+	public Date getIssueEndDate() {
+		return issueEndDate;
 	}
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+	public void setIssueEndDate(Date issueEndDate) {
+		this.issueEndDate = issueEndDate;
 	}
 
-	public String getPriority() {
-		return priority;
+	public String getIssuePriority() {
+		return issuePriority;
 	}
 
-	public void setPriority(String priority) {
-		this.priority = priority;
+	public void setIssuePriority(String issuePriority) {
+		this.issuePriority = issuePriority;
 	}
 
 	public String getIssueDescr() {
@@ -150,20 +145,20 @@ public class Issue {
 		this.issueDescr = issueDescr;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getIssueStatus() {
+		return issueStatus;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setIssueStatus(String issueStatus) {
+		this.issueStatus = issueStatus;
 	}
 
-	public byte getIsactive() {
-		return isactive;
+	public String getIssueIsactive() {
+		return issueIsactive;
 	}
 
-	public void setIsactive(byte isactive) {
-		this.isactive = isactive;
+	public void setIssueIsactive(String issueIsactive) {
+		this.issueIsactive = issueIsactive;
 	}
 
 	public Date getDtCreated() {
@@ -182,66 +177,36 @@ public class Issue {
 		this.dtUpdated = dtUpdated;
 	}
 
-	public String getReview() {
-		return review;
+	public String getIssueReview() {
+		return issueReview;
 	}
 
-	public void setReview(String review) {
-		this.review = review;
+	public void setIssueReview(String issueReview) {
+		this.issueReview = issueReview;
 	}
 
-	public String getComments() {
-		return comments;
+	public String getIssueComments() {
+		return issueComments;
 	}
 
-	public void setComments(String comments) {
-		this.comments = comments;
+	public void setIssueComments(String issueComments) {
+		this.issueComments = issueComments;
 	}
 
-	public Employee getCreatedBy() {
-		return createdBy;
+	public Employee getIssueCreatedBy() {
+		return issueCreatedBy;
 	}
 
-	public void setCreatedBy(Employee createdBy) {
-		this.createdBy = createdBy;
+	public void setIssueCreatedBy(Employee issueCreatedBy) {
+		this.issueCreatedBy = issueCreatedBy;
 	}
 
-	/*
-	 * public List<Employee> getEmployees() { return employees; }
-	 * 
-	 * public void setEmployees(List<Employee> employees) { this.employees =
-	 * employees; }
-	 */
-
-	public Issue(String issueSubject, String issueType, Sprint sprint, Project proj, Date startDate, Date endDate,
-			String priority, String issueDescr, String status, byte isactive, Date dtCreated, Date dtUpdated,
-			String review, String comments, Employee createdBy/* , List<Employee> employees */) {
-		super();
-		this.issueSubject = issueSubject;
-		this.issueType = issueType;
-		this.sprint = sprint;
-		this.proj = proj;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.priority = priority;
-		this.issueDescr = issueDescr;
-		this.status = status;
-		this.isactive = isactive;
-		this.dtCreated = dtCreated;
-		this.dtUpdated = dtUpdated;
-		this.review = review;
-		this.comments = comments;
-		this.createdBy = createdBy;
-		// this.employees = employees;
+	public Set<Employee> getIssueEmployees() {
+		return issueEmployees;
 	}
 
-	@Override
-	public String toString() {
-		return "Issue [id=" + id + ", issueSubject=" + issueSubject + ", issueType=" + issueType + ", sprint=" + sprint
-				+ ", project=" + proj + ", startDate=" + startDate + ", endDate=" + endDate + ", priority=" + priority
-				+ ", issueDescr=" + issueDescr + ", status=" + status + ", isactive=" + isactive + ", dtCreated="
-				+ dtCreated + ", dtUpdated=" + dtUpdated + ", review=" + review + ", comments=" + comments
-				+ ", createdBy=" + createdBy + "]";
+	public void setIssueEmployees(Set<Employee> issueEmployees) {
+		this.issueEmployees = issueEmployees;
 	}
 
 }

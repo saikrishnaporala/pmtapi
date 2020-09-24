@@ -58,14 +58,14 @@ public class IssueController {
 	}
 
 	// inserting issue
-	@PostMapping("/create")
+	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<UUID> addIssues(@ModelAttribute Issue_dto issue) {
 		return new ResponseEntity<>(service.cuIssue(issue), HttpStatus.CREATED);
 	}
 
 	// updating issue by id
-	@PutMapping("/{id}")
+	@PutMapping("/")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<UUID> updateIssue(@ModelAttribute Issue_dto issue) {
 		return new ResponseEntity<>(service.cuIssue(issue), HttpStatus.OK);
@@ -79,7 +79,7 @@ public class IssueController {
 
 	// deleting issue by id
 	@DeleteMapping("/{id}")
-	public void deleteIssueByID(@RequestBody Issue e, @PathVariable UUID id) {
+	public void deleteIssueByID(@PathVariable UUID id) {
 		service.deleteIssueByID(id);
 	}
 

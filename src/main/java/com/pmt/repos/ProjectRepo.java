@@ -10,5 +10,5 @@ import com.pmt.models.Project;
 
 public interface ProjectRepo extends JpaRepository<Project, UUID> {
 
-	List<Project> findByCreatedBy(Employee emp);
+	List<Project> findByProjCreatedBy(Employee emp);
 }

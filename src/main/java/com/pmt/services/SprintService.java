@@ -2,6 +2,7 @@ package com.pmt.services;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.pmt.models.Project;
 import com.pmt.models.Sprint;
 import com.pmt.models.dto.Sprint_dto;
+import com.pmt.repos.ProjectRepo;
 import com.pmt.repos.SprintRepo;
 
 @Service
@@ -17,6 +19,9 @@ public class SprintService {
 
 	@Autowired
 	private SprintRepo repo;
+
+	@Autowired
+	private ProjectRepo prepo;
 
 	@Autowired
 	private EmployeeService empservice;
@@ -55,6 +60,10 @@ public class SprintService {
 		 * proj.setPhoto(fileDownloadUri); repo.save(proj); }
 		 */
 		sprint = repo.save(sprint);
+		Project p = prepo.getOne(obj.getSprintProj());
+		Set<Sprint> s = p.getSprint();
+		s.add(sprint);
+		prepo.save(p);
 		return sprint.getSprintid();
 	}
 
@@ -80,8 +89,14 @@ public class SprintService {
 	}
 
 	// deleting sprint by id
-	public void deleteSprintByID(UUID id) {
+	public UUID deleteSprintByID(UUID id) {
 		repo.deleteById(id);
+		UUID s = repo.getOne(id).getSprintid();
+		if (s == null) {
+			return null;
+		} else {
+			return s;
+		}
 	}
 
 	// patching/updating sprint by id
@@ -95,7 +110,7 @@ public class SprintService {
 		System.out.println("pid: " + id);
 		Project proj = new Project();
 		proj.setId(id);
-		List<Sprint> list = (List<Sprint>) repo.findByProj(proj);
+		List<Sprint> list = (List<Sprint>) repo.findBySprintProj(proj);
 		// list.sort(Comparator.comparing(Sprint_dto::getSeq));
 		return list;
 	}

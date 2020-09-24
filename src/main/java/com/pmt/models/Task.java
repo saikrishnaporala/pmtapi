@@ -1,6 +1,8 @@
 package com.pmt.models;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -9,11 +11,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * The persistent class for the users database table.
@@ -26,64 +32,65 @@ public class Task {
 	@Id
 	@GeneratedValue(generator = "uuid2")
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
-	@Column(name = "id", columnDefinition = "BINARY(16)")
-	private UUID id;
+	@Column(columnDefinition = "BINARY(16)")
+	private UUID taskid;
 
 	private String taskName;
 
 	@ManyToOne
 	@JoinColumn(name = "sprint_id")
-	private Sprint sprint; // object
+	private Sprint taskSprint; // object
 
 	private String taskType;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "start_date")
-	private Date startDate;
+	@ManyToOne
+	@JoinColumn(name = "task_id")
+	private Task taskParent; // object
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "end_date")
-	private Date endDate;
+	private Date taskStartDate;
 
-	private String priority;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date taskEndDate;
+
+	private String taskPriority;
 	private String taskDescr;
-	private String status;
-	private byte isactive;
+	private String taskStatus;
+	private String taskIsactive;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "dt_created")
 	private Date dtCreated;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "dt_updated")
 	private Date dtUpdated;
 
-	private String review;
-	private String revision;
-	private String comments;
+	private String taskReview;
+	private String taskComments;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "emp_id")
-	private Employee createdBy;
+	private Employee taskCreatedBy;
 
 	@ManyToOne
 	@JoinColumn(name = "proj_id")
-	private Project proj;
-	/*
-	 * @ManyToMany(targetEntity = Employee.class, mappedBy = "tasks", cascade = {
-	 * CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE,
-	 * CascadeType.REFRESH }) private List<Employee> employees;
-	 */
+	private Project taskProj;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "taskParent", cascade = CascadeType.ALL)
+	private List<Task> tasks;
+
+	@ManyToMany(mappedBy = "tasks")
+	private Set<Employee> taskEmployees;
 
 	public Task() {
 	}
 
-	public UUID getId() {
-		return id;
+	public UUID getTaskid() {
+		return taskid;
 	}
 
-	public void setId(UUID id) {
-		this.id = id;
+	public void setId(UUID taskid) {
+		this.taskid = taskid;
 	}
 
 	public String getTaskName() {
@@ -94,12 +101,12 @@ public class Task {
 		this.taskName = taskName;
 	}
 
-	public Sprint getSprint() {
-		return sprint;
+	public Sprint getTaskSprint() {
+		return taskSprint;
 	}
 
-	public void setSprint(Sprint sprint) {
-		this.sprint = sprint;
+	public void setTaskSprint(Sprint taskSprint) {
+		this.taskSprint = taskSprint;
 	}
 
 	public String getTaskType() {
@@ -110,28 +117,36 @@ public class Task {
 		this.taskType = taskType;
 	}
 
-	public Date getStartDate() {
-		return startDate;
+	public Task getTaskParent() {
+		return taskParent;
 	}
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+	public void setTaskParent(Task taskParent) {
+		this.taskParent = taskParent;
 	}
 
-	public Date getEndDate() {
-		return endDate;
+	public Date getTaskStartDate() {
+		return taskStartDate;
 	}
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+	public void setTaskStartDate(Date taskStartDate) {
+		this.taskStartDate = taskStartDate;
 	}
 
-	public String getPriority() {
-		return priority;
+	public Date getTaskEndDate() {
+		return taskEndDate;
 	}
 
-	public void setPriority(String priority) {
-		this.priority = priority;
+	public void setTaskEndDate(Date taskEndDate) {
+		this.taskEndDate = taskEndDate;
+	}
+
+	public String getTaskPriority() {
+		return taskPriority;
+	}
+
+	public void setTaskPriority(String taskPriority) {
+		this.taskPriority = taskPriority;
 	}
 
 	public String getTaskDescr() {
@@ -142,20 +157,20 @@ public class Task {
 		this.taskDescr = taskDescr;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getTaskStatus() {
+		return taskStatus;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setTaskStatus(String taskStatus) {
+		this.taskStatus = taskStatus;
 	}
 
-	public byte getIsactive() {
-		return isactive;
+	public String getTaskIsactive() {
+		return taskIsactive;
 	}
 
-	public void setIsactive(byte isactive) {
-		this.isactive = isactive;
+	public void setTaskIsactive(String taskIsactive) {
+		this.taskIsactive = taskIsactive;
 	}
 
 	public Date getDtCreated() {
@@ -174,82 +189,55 @@ public class Task {
 		this.dtUpdated = dtUpdated;
 	}
 
-	public String getReview() {
-		return review;
+	public String getTaskReview() {
+		return taskReview;
 	}
 
-	public void setReview(String review) {
-		this.review = review;
+	public void setTaskReview(String taskReview) {
+		this.taskReview = taskReview;
 	}
 
-	public String getRevision() {
-		return revision;
+	public String getTaskComments() {
+		return taskComments;
 	}
 
-	public void setRevision(String revision) {
-		this.revision = revision;
+	public void setTaskComments(String taskComments) {
+		this.taskComments = taskComments;
 	}
 
-	public String getComments() {
-		return comments;
+	public Employee getTaskCreatedBy() {
+		return taskCreatedBy;
 	}
 
-	public void setComments(String comments) {
-		this.comments = comments;
+	public void setTaskCreatedBy(Employee taskCreatedBy) {
+		this.taskCreatedBy = taskCreatedBy;
 	}
 
-	public Employee getCreatedBy() {
-		return createdBy;
+	public Project getTaskProj() {
+		return taskProj;
 	}
 
-	public void setCreatedBy(Employee createdBy) {
-		this.createdBy = createdBy;
+	public void setTaskProj(Project taskProj) {
+		this.taskProj = taskProj;
 	}
 
-	public Project getProj() {
-		return proj;
+	public List<Task> getTasks() {
+		return tasks;
 	}
 
-	public void setProj(Project proj) {
-		this.proj = proj;
+	public void setTasks(List<Task> tasks) {
+		this.tasks = tasks;
 	}
 
-	public Task(String taskName, Sprint sprint, String taskType, Date startDate, Date endDate, String priority,
-			String taskDescr, String status, byte isactive, Date dtCreated, Date dtUpdated, String review,
-			String revision, String comments, Employee createdBy, Project proj) {
-		super();
-		this.taskName = taskName;
-		this.sprint = sprint;
-		this.taskType = taskType;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.priority = priority;
-		this.taskDescr = taskDescr;
-		this.status = status;
-		this.isactive = isactive;
-		this.dtCreated = dtCreated;
-		this.dtUpdated = dtUpdated;
-		this.review = review;
-		this.revision = revision;
-		this.comments = comments;
-		this.createdBy = createdBy;
-		this.proj = proj;
+	public Set<Employee> getTaskEmployees() {
+		return taskEmployees;
 	}
 
-	@Override
-	public String toString() {
-		return "Task [id=" + id + ", taskName=" + taskName + ", sprint=" + sprint + ", taskType=" + taskType
-				+ ", startDate=" + startDate + ", endDate=" + endDate + ", priority=" + priority + ", taskDescr="
-				+ taskDescr + ", status=" + status + ", isactive=" + isactive + ", dtCreated=" + dtCreated
-				+ ", dtUpdated=" + dtUpdated + ", review=" + review + ", revision=" + revision + ", comments="
-				+ comments + ", createdBy=" + createdBy + ", proj=" + proj + "]";
+	public void setTaskEmployees(Set<Employee> taskEmployees) {
+		this.taskEmployees = taskEmployees;
 	}
 
-	/*
-	 * public List<Employee> getEmployees() { return employees; }
-	 * 
-	 * public void setEmployees(List<Employee> employees) { this.employees =
-	 * employees; }
-	 */
-
+	public void setTaskid(UUID taskid) {
+		this.taskid = taskid;
+	}
 }

@@ -51,6 +51,11 @@ public class TaskController {
 		return service.getAllTasksByPID(id);
 	}
 
+	@GetMapping("/sid/{id}")
+	public List<Task> getAllSprintTasks(@PathVariable UUID id) {
+		return service.getAllTasksBySprintID(id);
+	}
+
 	// displaying task by id
 	@GetMapping("/{id}")
 	public Task getTask(@PathVariable UUID id) {
@@ -58,14 +63,14 @@ public class TaskController {
 	}
 
 	// inserting task
-	@PostMapping("/create")
+	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<UUID> addTasks(@ModelAttribute Task_dto task) {
 		return new ResponseEntity<>(service.cuTask(task), HttpStatus.CREATED);
 	}
 
 	// updating task by id
-	@PutMapping("/{id}")
+	@PutMapping("/")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<UUID> updateTask(@ModelAttribute Task_dto task) {
 		return new ResponseEntity<>(service.cuTask(task), HttpStatus.OK);
@@ -79,7 +84,7 @@ public class TaskController {
 
 	// deleting task by id
 	@DeleteMapping("/{id}")
-	public void deleteTaskByID(@RequestBody Task e, @PathVariable UUID id) {
+	public void deleteTaskByID(@PathVariable UUID id) {
 		service.deleteTaskByID(id);
 	}
 

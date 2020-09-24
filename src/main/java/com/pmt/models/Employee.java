@@ -1,20 +1,23 @@
 package com.pmt.models;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * The persistent class for the users database table.
@@ -39,7 +42,8 @@ public class Employee {
 	private Long mob;
 	private String roleType;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@JsonIgnore
+	@ManyToOne
 	private Department dept;
 
 	private String designation;
@@ -50,9 +54,9 @@ public class Employee {
 	private String skypeId;
 	private String twitterId;
 	private String linkedinId;
-	private byte isactive;
-	private byte isAgree;
-	private byte isEmail;
+	private String isactive;
+	private String isAgree;
+	private String isEmail;
 	private String photo;
 	private String aboutme;
 
@@ -77,11 +81,37 @@ public class Employee {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dtLastLogout;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Company company;
 
-	@ManyToMany(targetEntity = Project.class, cascade = CascadeType.ALL)
-	private List<Project> projects;
+	@JsonIgnore
+	@OneToMany(mappedBy = "issueCreatedBy", orphanRemoval = true)
+	private Set<Issue> issueCreatedBy;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "projCreatedBy", orphanRemoval = true)
+	private Set<Project> projCreatedBy;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "sprintCreatedBy", orphanRemoval = true)
+	private Set<Sprint> sprintCreatedBy;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "taskCreatedBy", orphanRemoval = true)
+	private Set<Task> taskCreatedBy;
+
+	@JsonIgnore
+	@ManyToMany
+	private Set<Project> projects;
+
+	@JsonIgnore
+	@ManyToMany
+	private Set<Issue> issues;
+
+	@JsonIgnore
+	@ManyToMany
+	private Set<Task> tasks;
 
 	public Employee() {
 	}
@@ -230,27 +260,27 @@ public class Employee {
 		this.linkedinId = linkedinId;
 	}
 
-	public byte getIsactive() {
+	public String getIsactive() {
 		return isactive;
 	}
 
-	public void setIsactive(byte isactive) {
+	public void setIsactive(String isactive) {
 		this.isactive = isactive;
 	}
 
-	public byte getIsAgree() {
+	public String getIsAgree() {
 		return isAgree;
 	}
 
-	public void setIsAgree(byte isAgree) {
+	public void setIsAgree(String isAgree) {
 		this.isAgree = isAgree;
 	}
 
-	public byte getIsEmail() {
+	public String getIsEmail() {
 		return isEmail;
 	}
 
-	public void setIsEmail(byte isEmail) {
+	public void setIsEmail(String isEmail) {
 		this.isEmail = isEmail;
 	}
 
@@ -334,52 +364,60 @@ public class Employee {
 		this.company = company;
 	}
 
-	public List<Project> getProjects() {
+	public Set<Project> getProjects() {
 		return projects;
 	}
 
-	public void setProjects(List<Project> projects) {
+	public void setProjects(Set<Project> projects) {
 		this.projects = projects;
 	}
 
-	public Employee(int empid, String gender, String firstName, String lastName, String officialEmail,
-			String personalEmail, Long mob, String roleType, Department dept, String designation, Date joinDate,
-			Date endDate, String username, String password, String skypeId, String twitterId, String linkedinId,
-			byte isactive, byte isAgree, byte isEmail, String photo, String aboutme, Date actDate, Date billingEndDate,
-			Date billingStartDate, Date dtCreated, Date dtUpdated, Date dtLastLogin, Date dtLastLogout, Company company,
-			List<Project> projects) {
-		super();
-		this.empid = empid;
-		this.gender = gender;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.officialEmail = officialEmail;
-		this.personalEmail = personalEmail;
-		this.mob = mob;
-		this.roleType = roleType;
-		this.dept = dept;
-		this.designation = designation;
-		this.joinDate = joinDate;
-		this.endDate = endDate;
-		this.username = username;
-		this.password = password;
-		this.skypeId = skypeId;
-		this.twitterId = twitterId;
-		this.linkedinId = linkedinId;
-		this.isactive = isactive;
-		this.isAgree = isAgree;
-		this.isEmail = isEmail;
-		this.photo = photo;
-		this.aboutme = aboutme;
-		this.actDate = actDate;
-		this.billingEndDate = billingEndDate;
-		this.billingStartDate = billingStartDate;
-		this.dtCreated = dtCreated;
-		this.dtUpdated = dtUpdated;
-		this.dtLastLogin = dtLastLogin;
-		this.dtLastLogout = dtLastLogout;
-		this.company = company;
-		this.projects = projects;
+	public Set<Sprint> getSprintCreatedBy() {
+		return sprintCreatedBy;
+	}
+
+	public void setSprintCreatedBy(Set<Sprint> sprintCreatedBy) {
+		this.sprintCreatedBy = sprintCreatedBy;
+	}
+
+	public Set<Issue> getIssues() {
+		return issues;
+	}
+
+	public void setIssues(Set<Issue> issues) {
+		this.issues = issues;
+	}
+
+	public Set<Task> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(Set<Task> tasks) {
+		this.tasks = tasks;
+	}
+
+	public Set<Issue> getIssueCreatedBy() {
+		return issueCreatedBy;
+	}
+
+	public void setIssueCreatedBy(Set<Issue> issueCreatedBy) {
+		this.issueCreatedBy = issueCreatedBy;
+	}
+
+	public Set<Project> getProjCreatedBy() {
+		return projCreatedBy;
+	}
+
+	public void setProjCreatedBy(Set<Project> projCreatedBy) {
+		this.projCreatedBy = projCreatedBy;
+	}
+
+	public Set<Task> getTaskCreatedBy() {
+		return taskCreatedBy;
+	}
+
+	public void setTaskCreatedBy(Set<Task> taskCreatedBy) {
+		this.taskCreatedBy = taskCreatedBy;
 	}
 
 }

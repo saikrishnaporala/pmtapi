@@ -38,7 +38,7 @@ public class Department {
 	private Date dtUpdated;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "dept")
+	@OneToMany(mappedBy = "dept", orphanRemoval = true)
 	private List<Employee> emp;
 
 	public Department() {

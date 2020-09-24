@@ -10,5 +10,5 @@ import com.pmt.models.Sprint;
 
 public interface SprintRepo extends JpaRepository<Sprint, UUID> {
 
-	List<Sprint> findByProj(Project proj);
+	List<Sprint> findBySprintProj(Project proj);
 }

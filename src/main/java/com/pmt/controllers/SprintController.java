@@ -60,9 +60,9 @@ public class SprintController {
 	}
 
 	// updating sprint by id
-	@PutMapping("/{id}")
+	@PutMapping("/")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<UUID> updateSprint(@RequestBody Sprint_dto sprint_dto, @PathVariable UUID id) {
+	public ResponseEntity<UUID> updateSprint(@ModelAttribute Sprint_dto sprint_dto) {
 		return new ResponseEntity<>(service.CUSprint(sprint_dto), HttpStatus.CREATED);
 	}
 
@@ -74,8 +74,9 @@ public class SprintController {
 
 	// deleting sprint by id
 	@DeleteMapping("/{id}")
-	public void deleteSprintByID(@RequestBody Sprint e, @PathVariable UUID id) {
-		service.deleteSprintByID(id);
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<UUID> deleteSprintByID(@PathVariable UUID id) {
+		return new ResponseEntity<>(service.deleteSprintByID(id), HttpStatus.OK);
 	}
 
 	// updating/ patching sprint by id

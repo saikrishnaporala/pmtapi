@@ -6,9 +6,12 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.pmt.models.Project;
+import com.pmt.models.Sprint;
 import com.pmt.models.Task;
 
 public interface TaskRepo extends JpaRepository<Task, UUID> {
 
-	List<Task> findByProj(Project proj);
+	List<Task> findByTaskProj(Project proj);
+
+	List<Task> findByTaskSprint(Sprint sprint);
 }

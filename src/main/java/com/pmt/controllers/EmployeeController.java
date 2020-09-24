@@ -96,4 +96,9 @@ public class EmployeeController {
 	public void patchEmployeeByID(@RequestBody Employee obj, @PathVariable UUID id) {
 		service.patchEmployee(obj, id);
 	}
+
+//	@GetMapping("/uid/{id}")
+//	public Set<Task> getAllAssignedTasks(@PathVariable UUID id) {
+//		return service.getAllTasksByEmployeeID(id);
+//	}
 }

@@ -2,9 +2,9 @@ package com.pmt.models;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,10 +12,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Project {
@@ -29,19 +32,16 @@ public class Project {
 	private String client; // object
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date startDate;
+	private Date projStartDate;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date endDate;
-
-	private int rate;
-	private String ratebasedOn;
-	private String priority;
+	private Date projEndDate;
+	private String projPriority;
 	private String projDescr;
-	private String skills;
-	private String tools;
-	private String status;
-	private byte isactive;
+	private String projSkills;
+	private String projTools;
+	private String projStatus;
+	private String projIsactive;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dtCreated;
@@ -49,24 +49,29 @@ public class Project {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dtUpdated;
 
+	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "company_id")
+	@JoinColumn(name = "company")
 	private Company company;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "empid")
-	private Employee createdBy;
+	private Employee projCreatedBy;
 
-//	@JsonIgnore
-//	@OneToMany(mappedBy = "proj", cascade = CascadeType.ALL)
-//	private List<Sprint_dto> activity;
-//
-//	@JsonIgnore
-//	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-//	private List<Issue> issues;
+	@JsonIgnore
+	@OneToMany(mappedBy = "sprintProj", orphanRemoval = true)
+	private Set<Sprint> sprint;
 
-	@ManyToMany(targetEntity = Employee.class, mappedBy = "projects", cascade = CascadeType.ALL)
-	private List<Employee> employees;
+	@JsonIgnore
+	@OneToMany(mappedBy = "taskProj", orphanRemoval = true)
+	private List<Task> task;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "issueProj", orphanRemoval = true)
+	private List<Issue> issues;
+
+	@ManyToMany(mappedBy = "projects")
+	private Set<Employee> employees;
 
 	public Project() {
 	}
@@ -95,44 +100,28 @@ public class Project {
 		this.client = client;
 	}
 
-	public Date getStartDate() {
-		return startDate;
+	public Date getProjStartDate() {
+		return projStartDate;
 	}
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+	public void setProjStartDate(Date projStartDate) {
+		this.projStartDate = projStartDate;
 	}
 
-	public Date getEndDate() {
-		return endDate;
+	public Date getProjEndDate() {
+		return projEndDate;
 	}
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+	public void setProjEndDate(Date projEndDate) {
+		this.projEndDate = projEndDate;
 	}
 
-	public int getRate() {
-		return rate;
+	public String getProjPriority() {
+		return projPriority;
 	}
 
-	public void setRate(int rate) {
-		this.rate = rate;
-	}
-
-	public String getRatebasedOn() {
-		return ratebasedOn;
-	}
-
-	public void setRatebasedOn(String ratebasedOn) {
-		this.ratebasedOn = ratebasedOn;
-	}
-
-	public String getPriority() {
-		return priority;
-	}
-
-	public void setPriority(String priority) {
-		this.priority = priority;
+	public void setProjPriority(String projPriority) {
+		this.projPriority = projPriority;
 	}
 
 	public String getProjDescr() {
@@ -143,36 +132,36 @@ public class Project {
 		this.projDescr = projDescr;
 	}
 
-	public String getSkills() {
-		return skills;
+	public String getProjSkills() {
+		return projSkills;
 	}
 
-	public void setSkills(String skills) {
-		this.skills = skills;
+	public void setProjSkills(String projSkills) {
+		this.projSkills = projSkills;
 	}
 
-	public String getTools() {
-		return tools;
+	public String getProjTools() {
+		return projTools;
 	}
 
-	public void setTools(String tools) {
-		this.tools = tools;
+	public void setProjTools(String projTools) {
+		this.projTools = projTools;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getProjStatus() {
+		return projStatus;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setProjStatus(String projStatus) {
+		this.projStatus = projStatus;
 	}
 
-	public byte getIsactive() {
-		return isactive;
+	public String getProjIsactive() {
+		return projIsactive;
 	}
 
-	public void setIsactive(byte isactive) {
-		this.isactive = isactive;
+	public void setProjIsactive(String projIsactive) {
+		this.projIsactive = projIsactive;
 	}
 
 	public Date getDtCreated() {
@@ -199,42 +188,27 @@ public class Project {
 		this.company = company;
 	}
 
-	public Employee getCreatedBy() {
-		return createdBy;
+	public Employee getProjCreatedBy() {
+		return projCreatedBy;
 	}
 
-	public void setCreatedBy(Employee createdBy) {
-		this.createdBy = createdBy;
+	public void setProjCreatedBy(Employee projCreatedBy) {
+		this.projCreatedBy = projCreatedBy;
 	}
 
-	public List<Employee> getEmployees() {
+	public Set<Sprint> getSprint() {
+		return sprint;
+	}
+
+	public void setSprint(Set<Sprint> sprint) {
+		this.sprint = sprint;
+	}
+
+	public Set<Employee> getEmployees() {
 		return employees;
 	}
 
-	public void setEmployees(List<Employee> employees) {
-		this.employees = employees;
-	}
-
-	public Project(String projName, String client, Date startDate, Date endDate, int rate, String ratebasedOn,
-			String priority, String projDescr, String skills, String tools, String status, byte isactive,
-			Date dtCreated, Date dtUpdated, Company company, Employee createdBy, List<Employee> employees) {
-		super();
-		this.projName = projName;
-		this.client = client;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.rate = rate;
-		this.ratebasedOn = ratebasedOn;
-		this.priority = priority;
-		this.projDescr = projDescr;
-		this.skills = skills;
-		this.tools = tools;
-		this.status = status;
-		this.isactive = isactive;
-		this.dtCreated = dtCreated;
-		this.dtUpdated = dtUpdated;
-		this.company = company;
-		this.createdBy = createdBy;
+	public void setEmployees(Set<Employee> employees) {
 		this.employees = employees;
 	}
 

@@ -40,7 +40,7 @@ public class Sprint {
 	@JoinColumn(name = "emp_id")
 	private Employee sprintCreatedBy;
 
-	private byte sprintIsactive;
+	private String sprintIsactive;
 	private String sprintDescr;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date sprintDtCreated;
@@ -107,11 +107,11 @@ public class Sprint {
 		this.sprintCreatedBy = sprintCreatedBy;
 	}
 
-	public byte getSprintIsactive() {
+	public String getSprintIsactive() {
 		return sprintIsactive;
 	}
 
-	public void setSprintIsactive(byte sprintIsactive) {
+	public void setSprintIsactive(String sprintIsactive) {
 		this.sprintIsactive = sprintIsactive;
 	}
 
@@ -140,8 +140,8 @@ public class Sprint {
 	}
 
 	public Sprint(UUID sprintid, String sprintName, Date sprintStartDate, Date sprintEndDate, String sprintStatus,
-			Project sprintProj, Employee sprintCreatedBy, byte sprintIsactive, String sprintDescr, Date sprintDtCreated,
-			Date sprintDtUpdated) {
+			Project sprintProj, Employee sprintCreatedBy, String sprintIsactive, String sprintDescr,
+			Date sprintDtCreated, Date sprintDtUpdated) {
 		super();
 		this.sprintid = sprintid;
 		this.sprintName = sprintName;

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -63,8 +64,12 @@ public class Company {
 	private Date modified;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "dept")
+	@OneToMany(mappedBy = "company", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Employee> emp;
+
+//	@JsonIgnore
+//	@OneToMany(mappedBy = "company", orphanRemoval = true, cascade = CascadeType.ALL)
+//	private List<Project> proj;
 
 	public Company() {
 	}
@@ -255,55 +260,6 @@ public class Company {
 
 	public void setModified(Date modified) {
 		this.modified = modified;
-	}
-
-	public List<Employee> getEmp() {
-		return emp;
-	}
-
-	public void setEmp(List<Employee> emp) {
-		this.emp = emp;
-	}
-
-	public Company(String companyName, String contactPerson, String logo, String address1, String address2, String city,
-			String state, String country, String zip, String phone, String fax, String email, String website,
-			String legalStatus, String estdYear, String empcount, String accessempcount, String businessType,
-			String aboutme, byte isActive, Date created, Date modified, List<Employee> emp) {
-		super();
-		this.companyName = companyName;
-		this.contactPerson = contactPerson;
-		this.logo = logo;
-		this.address1 = address1;
-		this.address2 = address2;
-		this.city = city;
-		this.state = state;
-		this.country = country;
-		this.zip = zip;
-		this.phone = phone;
-		this.fax = fax;
-		this.email = email;
-		this.website = website;
-		this.legalStatus = legalStatus;
-		this.estdYear = estdYear;
-		this.empcount = empcount;
-		this.accessempcount = accessempcount;
-		this.businessType = businessType;
-		this.aboutme = aboutme;
-		this.isActive = isActive;
-		this.created = created;
-		this.modified = modified;
-		this.emp = emp;
-	}
-
-	@Override
-	public String toString() {
-		return "Company [id=" + id + ", companyName=" + companyName + ", contactPerson=" + contactPerson + ", logo="
-				+ logo + ", address1=" + address1 + ", address2=" + address2 + ", city=" + city + ", state=" + state
-				+ ", country=" + country + ", zip=" + zip + ", phone=" + phone + ", fax=" + fax + ", email=" + email
-				+ ", website=" + website + ", legalStatus=" + legalStatus + ", estdYear=" + estdYear + ", empcount="
-				+ empcount + ", accessempcount=" + accessempcount + ", businessType=" + businessType + ", aboutme="
-				+ aboutme + ", isActive=" + isActive + ", created=" + created + ", modified=" + modified + ", emp="
-				+ emp + "]";
 	}
 
 }

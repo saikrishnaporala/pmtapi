@@ -10,5 +10,5 @@ import com.pmt.models.Project;
 
 public interface IssuesRepo extends JpaRepository<Issue, UUID> {
 
-	List<Issue> findByProj(Project proj);
+	List<Issue> findByIssueProj(Project proj);
 }

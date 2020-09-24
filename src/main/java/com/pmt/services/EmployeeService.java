@@ -96,6 +96,7 @@ public class EmployeeService {
 		c1.setPersonalEmail(c.getPersonalEmail());
 		c1.setMob(c.getMob());
 		c1.setRoleType(c.getRoleType());
+		System.out.println("dept : " + c.getDept());
 		c1.setDept(deptService.getDepartment(c.getDept()));
 		c1.setDesignation(c.getDesignation());
 		c1.setJoinDate(c.getJoinDate());
@@ -114,6 +115,7 @@ public class EmployeeService {
 		c1.setBillingEndDate(c.getBillingEndDate());
 		c1.setDtLastLogin(c.getDtLastLogin());
 		c1.setDtLastLogout(c.getDtLastLogout());
+		System.out.println("company : " + c.getCompany());
 		c1.setCompany(companyService.getComp(c.getCompany()));
 
 		return c1;
@@ -132,4 +134,10 @@ public class EmployeeService {
 		Integer e = repo.findMaxEmpId();
 		return e;
 	}
+
+//	public Set<Task> getAllTasksByEmployeeID(UUID id) {
+//		Employee e = this.getEmployee(id);
+//		Set<Task> l = (Set<Task>) e.getTasks();
+//		return l;
+//	}
 }

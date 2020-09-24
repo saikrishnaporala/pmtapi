@@ -38,9 +38,9 @@ public class Employee_dto {
 	private String skypeId;
 	private String twitterId;
 	private String linkedinId;
-	private byte isactive;
-	private byte isAgree;
-	private byte isEmail;
+	private String isactive;
+	private String isAgree;
+	private String isEmail;
 	private MultipartFile photo;
 	private String aboutme;
 
@@ -206,27 +206,27 @@ public class Employee_dto {
 		this.linkedinId = linkedinId;
 	}
 
-	public byte getIsactive() {
+	public String getIsactive() {
 		return isactive;
 	}
 
-	public void setIsactive(byte isactive) {
+	public void setIsactive(String isactive) {
 		this.isactive = isactive;
 	}
 
-	public byte getIsAgree() {
+	public String getIsAgree() {
 		return isAgree;
 	}
 
-	public void setIsAgree(byte isAgree) {
+	public void setIsAgree(String isAgree) {
 		this.isAgree = isAgree;
 	}
 
-	public byte getIsEmail() {
+	public String getIsEmail() {
 		return isEmail;
 	}
 
-	public void setIsEmail(byte isEmail) {
+	public void setIsEmail(String isEmail) {
 		this.isEmail = isEmail;
 	}
 

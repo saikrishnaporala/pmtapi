@@ -74,7 +74,7 @@ public class ProjectController {
 
 	// deleting project by id
 	@DeleteMapping("/{id}")
-	public void deleteProjectByID(@RequestBody Project e, @PathVariable UUID id) {
+	public void deleteProjectByID(@PathVariable UUID id) {
 		service.deleteProjectByID(id);
 	}
 
