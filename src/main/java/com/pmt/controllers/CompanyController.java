@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pmt.models.Company;
-import com.pmt.models.Company_dto;
+import com.pmt.models.dto.Company_dto;
 import com.pmt.services.CompanyService;
 
 @CrossOrigin("http://localhost:8080")

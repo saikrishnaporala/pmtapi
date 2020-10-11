@@ -110,7 +110,7 @@ public class Employee {
 	private Set<Issue> issues;
 
 	@JsonIgnore
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<Task> tasks;
 
 	public Employee() {

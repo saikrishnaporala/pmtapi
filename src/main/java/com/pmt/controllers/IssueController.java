@@ -79,8 +79,9 @@ public class IssueController {
 
 	// deleting issue by id
 	@DeleteMapping("/{id}")
-	public void deleteIssueByID(@PathVariable UUID id) {
-		service.deleteIssueByID(id);
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<UUID> deleteIssueByID(@PathVariable UUID id) {
+		return new ResponseEntity<>(service.deleteIssueByID(id), HttpStatus.OK);
 	}
 
 	// updating/ patching issue by id

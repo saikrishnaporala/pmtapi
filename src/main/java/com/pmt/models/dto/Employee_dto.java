@@ -1,4 +1,4 @@
-package com.pmt.models;
+package com.pmt.models.dto;
 
 import java.util.Date;
 import java.util.List;

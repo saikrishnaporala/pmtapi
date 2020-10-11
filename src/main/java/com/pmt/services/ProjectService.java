@@ -102,7 +102,7 @@ public class ProjectService {
 	}
 
 	// deleting project by id
-	public void deleteProjectByID(UUID id) {
+	public UUID deleteProjectByID(UUID id) {
 		Project p = repo.getOne(id);
 		for (Employee emp : p.getEmployees()) {
 			Employee e = erepo.getOne(emp.getId());
@@ -117,6 +117,12 @@ public class ProjectService {
 		s.remove(p);
 		erepo.save(e);
 		repo.deleteById(id);
+		UUID pid = repo.getOne(id).getId();
+		if (pid == null) {
+			return null;
+		} else {
+			return pid;
+		}
 	}
 
 	// patching/updating project by id

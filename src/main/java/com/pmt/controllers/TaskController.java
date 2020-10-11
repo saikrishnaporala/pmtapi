@@ -84,8 +84,9 @@ public class TaskController {
 
 	// deleting task by id
 	@DeleteMapping("/{id}")
-	public void deleteTaskByID(@PathVariable UUID id) {
-		service.deleteTaskByID(id);
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<UUID> deleteTaskByID(@PathVariable UUID id) {
+		return new ResponseEntity<>(service.deleteTaskByID(id), HttpStatus.OK);
 	}
 
 	// updating/ patching task by id

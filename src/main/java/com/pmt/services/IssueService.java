@@ -75,6 +75,16 @@ public class IssueService {
 //			s.add(issue);
 //			erepo.save(e);
 //		}
+		for (UUID emp : obj.getIssueEmployees()) {
+			Employee e = erepo.getOne(emp);
+			System.out.println("employee : " + e.getId());
+			e.getIssues().add(issue);
+			erepo.save(e);
+		}
+		Employee e = erepo.getOne(obj.getIssueCreatedBy());
+		e.getIssueCreatedBy().add(issue);
+		System.out.println(e.getIssueCreatedBy().toString());
+		erepo.save(e);
 		return issue.getIssueid();
 	}
 
@@ -117,17 +127,25 @@ public class IssueService {
 	}
 
 	// deleting issue by id
-	public void deleteIssueByID(UUID id) {
+	public UUID deleteIssueByID(UUID id) {
 		Issue i = repo.getOne(id);
-//		for (Employee emp : i.getIssueEmployees()) {
-//			Employee e = erepo.getOne(emp.getId());
-//			System.out.println("employee : " + e.getId());
-//			Set<Issue> s = e.getIssues();
-//			s.remove(i);
-//			e.setIssues(s);
-//			erepo.save(e);
-//		}
+		for (Employee emp : i.getIssueEmployees()) {
+			Employee e = erepo.getOne(emp.getId());
+			System.out.println("employee : " + e.getId());
+			e.getIssueCreatedBy().removeIf(s1 -> s1.equals(i));
+			erepo.save(e);
+		}
+		Employee e = i.getIssueCreatedBy();
+		e.getIssueCreatedBy().removeIf(s1 -> s1.equals(i));
+		System.out.println(e.getIssueCreatedBy().toString());
+		erepo.save(e);
 		repo.deleteById(id);
+		UUID iid = repo.getOne(id).getIssueid();
+		if (iid == null) {
+			return null;
+		} else {
+			return iid;
+		}
 	}
 
 	// patching/updating issue by id

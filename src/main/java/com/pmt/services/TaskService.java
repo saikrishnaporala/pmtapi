@@ -100,14 +100,6 @@ public class TaskService {
 		c1.setTaskProj(projservice.getProject(obj.getTaskProj()));
 		Set<Employee> employees = obj.getTaskEmployees().stream().map(u -> erepo.getOne(u)).collect(Collectors.toSet());
 		c1.setTaskEmployees(employees);
-//
-//		for (UUID emp : obj.getTaskEmployees()) {
-//			Employee e = erepo.getOne(emp);
-//			System.out.println("employee : " + e.getId());
-//			Set<Employee> s = c1.getTaskEmployees();
-//			s.add(e);
-//		}
-
 		return c1;
 
 	}
@@ -118,19 +110,25 @@ public class TaskService {
 	}
 
 	// deleting task by id
-	public void deleteTaskByID(UUID id) {
-		Task p = repo.getOne(id);
-		for (Employee emp : p.getTaskEmployees()) {
+	public UUID deleteTaskByID(UUID id) {
+		Task t = repo.getOne(id);
+		for (Employee emp : t.getTaskEmployees()) {
 			Employee e = erepo.getOne(emp.getId());
 			System.out.println("employee : " + e.getId());
-			e.getTaskCreatedBy().removeIf(s1 -> s1.equals(p));
+			e.getTaskCreatedBy().removeIf(s1 -> s1.equals(t));
 			erepo.save(e);
 		}
-		Employee e = p.getTaskCreatedBy();
-		e.getTaskCreatedBy().removeIf(s1 -> s1.equals(p));
+		Employee e = t.getTaskCreatedBy();
+		e.getTaskCreatedBy().removeIf(s1 -> s1.equals(t));
 		System.out.println(e.getTaskCreatedBy().toString());
-		// erepo.save(e);
-		// repo.deleteById(id);
+		erepo.save(e);
+		repo.deleteById(id);
+		UUID tid = repo.getOne(id).getTaskid();
+		if (tid == null) {
+			return null;
+		} else {
+			return tid;
+		}
 	}
 
 	// patching/updating task by id

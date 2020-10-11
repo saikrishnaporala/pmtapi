@@ -74,8 +74,9 @@ public class ProjectController {
 
 	// deleting project by id
 	@DeleteMapping("/{id}")
-	public void deleteProjectByID(@PathVariable UUID id) {
-		service.deleteProjectByID(id);
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<UUID> deleteProjectByID(@PathVariable UUID id) {
+		return new ResponseEntity<>(service.deleteProjectByID(id), HttpStatus.CREATED);
 	}
 
 	// updating/ patching project by id

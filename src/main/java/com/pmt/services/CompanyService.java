@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.pmt.models.Company;
-import com.pmt.models.Company_dto;
+import com.pmt.models.dto.Company_dto;
 import com.pmt.repos.CompanyRepo;
 
 @Service

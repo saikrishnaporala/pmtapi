@@ -1,10 +1,12 @@
-package com.pmt.models;
+package com.pmt.models.dto;
 
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
+
+import com.pmt.models.Department;
 
 /**
  * The persistent class for the companies database table.

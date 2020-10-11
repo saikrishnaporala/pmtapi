@@ -4,10 +4,8 @@ import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -34,15 +32,15 @@ public class Issue {
 
 	private String issueSubject;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "task_id")
 	private Task issueTask; // object
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "sprint_id")
 	private Sprint issueSprint; // object
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "proj_id")
 	private Project issueProj; // object
 
@@ -66,11 +64,11 @@ public class Issue {
 	private String issueReview;
 	private String issueComments;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "emp_id")
 	private Employee issueCreatedBy;
 
-	@ManyToMany(mappedBy = "issues", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+	@ManyToMany(mappedBy = "issues")
 	private Set<Employee> issueEmployees;
 
 	public UUID getIssueid() {

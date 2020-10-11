@@ -1,6 +1,7 @@
 package com.pmt.controllers;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +23,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pmt.models.Employee;
-import com.pmt.models.Employee_dto;
+import com.pmt.models.Task;
+import com.pmt.models.dto.Employee_dto;
 import com.pmt.services.EmployeeService;
 
 @CrossOrigin("http://localhost:8080")
@@ -97,8 +99,8 @@ public class EmployeeController {
 		service.patchEmployee(obj, id);
 	}
 
-//	@GetMapping("/uid/{id}")
-//	public Set<Task> getAllAssignedTasks(@PathVariable UUID id) {
-//		return service.getAllTasksByEmployeeID(id);
-//	}
+	@GetMapping("/uid/{id}")
+	public Set<Task> getAllAssignedTasks(@PathVariable UUID id) {
+		return service.getAllTasksByEmployeeID(id);
+	}
 }

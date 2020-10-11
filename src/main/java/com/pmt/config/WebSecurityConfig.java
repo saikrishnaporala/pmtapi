@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/authenticate", "/employee/register", "/employee/", "/employee/max", "/dept/create",
 						"/dept/", "/dept/{id}", "/employee/{id}", "/company/companies", "/company/{companyName}",
 						"/company/compregister", "/project/register", "/project/", "/project/emp/{id}", "/sprint/",
-						"/sprint/pid/{id}", "/task/create", "/task/", "/issues/create")
+						"/sprint/pid/{id}", "/task/create", "/task/", "/issues/create", "/employee/uid/{id}")
 
 				.permitAll()
 				// all other requests need to be authenticated

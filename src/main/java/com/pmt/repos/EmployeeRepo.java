@@ -1,12 +1,14 @@
 package com.pmt.repos;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.pmt.models.Employee;
+import com.pmt.models.Task;
 
 public interface EmployeeRepo extends JpaRepository<Employee, UUID> {
 
@@ -18,4 +20,7 @@ public interface EmployeeRepo extends JpaRepository<Employee, UUID> {
 	int findMaxEmpId();
 
 	public Employee findByUsername(String username);
+
+	@Query(value = "select tasks from Employee emp")
+	public Set<Task> findByTasks(UUID id);
 }

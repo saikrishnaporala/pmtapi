@@ -8,6 +8,7 @@ import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -37,7 +38,7 @@ public class Task {
 
 	private String taskName;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "sprint_id")
 	private Sprint taskSprint; // object
 
@@ -67,10 +68,12 @@ public class Task {
 	private String taskReview;
 	private String taskComments;
 
+	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "emp_id")
 	private Employee taskCreatedBy;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "proj_id")
 	private Project taskProj;
@@ -79,7 +82,7 @@ public class Task {
 	@OneToMany(mappedBy = "taskParent", cascade = CascadeType.ALL)
 	private List<Task> tasks;
 
-	@ManyToMany(mappedBy = "tasks")
+	@ManyToMany(mappedBy = "tasks", fetch = FetchType.LAZY)
 	private Set<Employee> taskEmployees;
 
 	public Task() {

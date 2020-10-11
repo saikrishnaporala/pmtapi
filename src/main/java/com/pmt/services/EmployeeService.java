@@ -2,6 +2,7 @@ package com.pmt.services;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.pmt.models.Employee;
-import com.pmt.models.Employee_dto;
+import com.pmt.models.Task;
+import com.pmt.models.dto.Employee_dto;
 import com.pmt.repos.EmployeeRepo;
 
 @Service
@@ -135,9 +137,8 @@ public class EmployeeService {
 		return e;
 	}
 
-//	public Set<Task> getAllTasksByEmployeeID(UUID id) {
-//		Employee e = this.getEmployee(id);
-//		Set<Task> l = (Set<Task>) e.getTasks();
-//		return l;
-//	}
+	public Set<Task> getAllTasksByEmployeeID(UUID id) {
+		Set<Task> l = repo.findByTasks(id);
+		return l;
+	}
 }
